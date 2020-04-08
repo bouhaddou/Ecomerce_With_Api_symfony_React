@@ -3,7 +3,7 @@ import Produits from './produits';
 import { Link } from 'react-router-dom';
 
 
-const Shop = () => {
+const Shop = (props) => {
     return ( <>
 
     <section className="banner_area">
@@ -26,7 +26,7 @@ const Shop = () => {
             <div className="container">
                 <div className="row flex-row-reverse">
                     <div className="col-lg-9">
-                        <Produits />
+                        <Produits setCartItems={props.setCartItems} />
 
                     </div>
                     <div className="col-lg-3">

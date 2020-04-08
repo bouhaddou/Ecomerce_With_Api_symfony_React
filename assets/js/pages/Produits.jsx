@@ -3,19 +3,17 @@ import axios from 'axios';
 import produitsApi from '../services/produitsApi';
 import { Link } from 'react-router-dom';
 
-const Produits = () => {
+const Produits = ({setCartItems}) => {
 
+  const [produits,setProduits] = useState({});
 
-  const [produits,setProduits] = useState([]);
-  const [cart, setCart] = useState([])
-  const [add, setAdd] = useState(false)
   
 
 
   const fetchProduits = async () =>{
     try{
      const data = await  produitsApi.findAll();
-        setProduits(data);
+         setProduits(data);
    }catch(error){
        console.log(error.response)
    }
@@ -26,17 +24,25 @@ useEffect(() => {
  
 }, []);
 
-const handleShop =(id) =>{
-  setAdd(true);
-  window.localStorage.setItem("id", id);  
-  let itemsArray = []
-
-  window.localStorage.setItem('items', JSON.stringify(id))
+const handleShop =(param) => {
+const {id, avatar,title, prix} = param;
+const items = JSON.parse(localStorage.getItem("produits")) 
+if(Array.isArray(items)){
+  items.push({id, avatar,title, prix})
+  localStorage.setItem("produits",JSON.stringify(items))
+  setCartItems(items)
+}else{
+  localStorage.setItem("produits",JSON.stringify([{id, avatar, title, prix}]))
+  setCartItems(items)
+} 
 }
 
 
-console.log(cart)
-    return ( <>
+  
+
+
+   if(!produits){
+      return <div>loading</div>}else{ return ( <>
   <section className="inspired_product_area section_gap_bottom_custom">
     <div className="container">
       <div className="row justify-content-center">
@@ -49,20 +55,19 @@ console.log(cart)
       </div>
 
       <div className="row">
-          {produits.map(produit =>
+          {produits.length >0 && produits.map(produit =>
             <div key={produit.id} className="col-lg-4 col-md-6 col-sm-12">
               <div className="single-product">
                 <div className="product-img">
-                  <img className="img-fluid w-100" src={produit.avatar} alt={produit.title} />
-                  <div className="p_icon">
-                      <Link className="d-block text-center " to={"/ProductInfo/" + produit.id }>
+                  <img className="img-fluid w-100" src={produit.avatar}  />
+                  <div className="p_icon"><a >
+                      <Link  to={"/ProductInfo/" + produit.id }>
                         <i className="ti-eye"></i>
-                      </Link>
+                      </Link></a>
                       <a href="#"> <i className="ti-heart"></i></a>
-                      <button 
-                      onClick={() => handleShop(produit.id)}
-                      > <i className="ti-shopping-cart"></i> </button>
-                      
+                      <a 
+                      onClick={() => handleShop(produit)}
+                      > <i className="ti-shopping-cart"></i> </a>
                   </div>
                 </div>
                 <div className="product-btm">
@@ -70,7 +75,7 @@ console.log(cart)
                   <h4 className="text-info">{produit.title.slice(0,22)}</h4>
                   </Link>
                   <div className="mt-3 text-center">
-                    <h6 className="mr-4 text-center text-danger">{produit.prix.toFixed(2)} Dirhams</h6>
+                    <h6 className="mr-4 text-center text-danger">{produit.prix} Dirhams</h6>
                   </div>
                 </div>
               </div>
@@ -81,6 +86,7 @@ console.log(cart)
   </section>
     
     </> );
+}
 }
  
 export default Produits;

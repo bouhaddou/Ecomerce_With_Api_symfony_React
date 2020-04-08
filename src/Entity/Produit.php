@@ -83,6 +83,7 @@ class Produit
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"produit_read"})
      */
     private $avatar;
 

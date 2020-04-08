@@ -1,18 +1,5 @@
 import React from 'react';
-import '../jquery-3.2.1.min.js';
-import '../popper.js';
-// import '../bootstrap.min.js';
-// import '../stellar.js';
-// import "vendors/lightbox/simpleLightbox.min.js';
-// import "vendors/nice-select/js/jquery.nice-select.min.js';
-// import "vendors/isotope/imagesloaded.pkgd.min.js';
-// import "vendors/isotope/isotope-min.js';
-// import "vendors/owl-carousel/owl.carousel.min.js';
-// import '../jquery.ajaxchimp.min.js';
-// import "vendors/counter-up/jquery.waypoints.min.js';
-// import "vendors/counter-up/jquery.counterup.js';
-// import '../mail-script.js';
-// import '../theme.js';
+
 const Footer = () => {
     return ( <>
      <footer className="footer-area section_gap">

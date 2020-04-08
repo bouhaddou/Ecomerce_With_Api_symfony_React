@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 
-const Navbar = () => {
+const Navbar = ({cartItems}) => {
 
-const [cart, setCart] = useState({
-  id:"",
-})
+const [cart, setCart] = useState([])
 
-    return ( 
+useEffect(() => {
+ const data =  localStorage.getItem("produits");
+ if(Array.isArray(JSON.parse(data))){
+   
+  setCart(JSON.parse(data));
+ }
+},[])
+return ( 
     <>
   <header className="header_area">
     <div className="top_menu">
@@ -118,11 +123,36 @@ const [cart, setCart] = useState({
                       <i className="ti-search" aria-hidden="true"></i>
                     </a>
                   </li>
-
-                  <li className="nav-item">
-                    <a href="#" className="icons">
-                      <i className="ti-shopping-cart"></i> <span className="badge badge-info">{cart.length}</span>
-                    </a>
+                  <li className="nav-item submenu dropdown">
+                    <a  className="nav-link dropdown-toggle icons" data-toggle="dropdown" role="button" aria-haspopup="true"
+                      aria-expanded="false"><i className="ti-shopping-cart"></i> <span className="badge badge-info">
+                        { cart.length}</span></a>
+                    <ul className="dropdown-menu ">
+                      <table className="table table-hover">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th>id</th>
+                            <th>Image</th>
+                            <th>prix</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                       
+                            { cart.map(produit => 
+                              <tr key={produit.id}>
+                                  <td> <Link to="/cart"><i className="fas fa-eye"></i></Link></td>
+                                  <td>{produit.id}</td>
+                                  <td>
+                                    <img className="w-100 h-15" src={produit.avatar} />
+                                  </td>
+                                  <td>{produit.prix}</td>
+                                  
+                              </tr>
+                            )}
+                        </tbody>
+                     </table>
+                    </ul>
                   </li>
 
                   <li className="nav-item">

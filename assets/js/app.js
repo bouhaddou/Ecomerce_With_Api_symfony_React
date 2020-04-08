@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState, useEffect} from 'react';
 import ReactDOM from "react-dom"
 import Navbar from './Component/Navbar';
 import Footer from './Component/Footer';
@@ -15,7 +15,7 @@ import '../css/jquery-ui/jquery-ui.css'
 import '../css/app.css';
 import '../css/style.css'
 import '../css/responsive.css';
-import { HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import Shop from './pages/Shop';
 import ProductInfo from './pages/ProductInfo';
@@ -27,17 +27,37 @@ import BlogPage from './pages/BlogPage';
 
 
 const App = () => {
+    const [cartItems, setCartItems] = useState([])
+
+    const fetchProduits =  () =>{
+        const items = JSON.parse(localStorage.getItem("ids")) 
+        setCartItems(items)
+    }
+    
+    useEffect(() => {
+        fetchProduits();
+     
+    }, []);
+   
+   
+
+
     return ( <>
-        
         <HashRouter>
-                <Navbar />
-                <Route path="/shop" component={Shop} />
+                <Navbar cartItems={cartItems} />
+                <Switch>
+                <Route  path="/shop" render={props=>{
+                   return <Shop setCartItems={setCartItems} {...props} /> 
+                }} />
                 <Route path="/ProductInfo/:id" component={ProductInfo} />
                 <Route path="/cart" component={Cart} />
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/contact" component={Contact} />
                 <Route path="/blog" component={BlogPage} />
-                <Route path="/" component={HomePage} />
+                <Route path="/" render={props=>{
+                   return <HomePage setCartItems={setCartItems} {...props} /> 
+                }} />
+                </Switch>
             <Footer />
         </HashRouter>
     </> );

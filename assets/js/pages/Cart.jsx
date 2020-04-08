@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 const Cart = () => {
+
+
+  const [cart, setCart] = useState([])
+
+  useEffect(() => {
+   const data =  localStorage.getItem("produits");
+   if(Array.isArray(JSON.parse(data))){
+     
+    setCart(JSON.parse(data));
+   }
+  },[])
+
+
     return ( <>
     
     <section className="banner_area">
@@ -29,29 +42,30 @@ const Cart = () => {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">Product</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Total</th>
+                  <th scope="col">Produit</th>
+                  <th scope="col">Prix</th>
+                  <th scope="col">Quantité</th>
+                  <th scope="col">Montant Total</th>
                 </tr>
               </thead>
               <tbody>
+              {cart.map(produit =>
                 <tr>
                   <td>
                     <div className="media">
-                      <div className="d-flex">
-                        <img
-                          src="img/product/single-product/cart-1.jpg"
+                      <div className="d-flex w-50 h-25">
+                        <img className="w-25 h-20"
+                          src={produit.avatar}
                           alt=""
                         />
                       </div>
                       <div className="media-body">
-                        <p>Minimalistic shop for multipurpose use</p>
+                          <p>{produit.title}</p>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <h5>$360.00</h5>
+                    <h5>{produit.prix}</h5>
                   </td>
                   <td>
                     <div className="product_count">
@@ -77,91 +91,7 @@ const Cart = () => {
                     <h5>$720.00</h5>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <div className="media">
-                      <div className="d-flex">
-                        <img
-                          src="img/product/single-product/cart-1.jpg"
-                          alt=""
-                        />
-                      </div>
-                      <div className="media-body">
-                        <p>Minimalistic shop for multipurpose use</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <h5>$360.00</h5>
-                  </td>
-                  <td>
-                    <div className="product_count">
-                      <input
-                       
-                        title="Quantity:"
-                        className="input-text qty"
-                      />
-                      <button
-                        className="increase items-count"
-                        type="button"
-                      >
-                        <i className="lnr lnr-chevron-up"></i>
-                      </button>
-                      <button
-                        className="reduced items-count"
-                        type="button"
-                      >
-                        <i className="lnr lnr-chevron-down"></i>
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <h5>$720.00</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="media">
-                      <div className="d-flex">
-                        <img
-                          src="img/product/single-product/cart-1.jpg"
-                          alt=""
-                        />
-                      </div>
-                      <div className="media-body">
-                        <p>Minimalistic shop for multipurpose use</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <h5>$360.00</h5>
-                  </td>
-                  <td>
-                    <div className="product_count">
-                      <input
-                        type="text"
-                       
-                        title="Quantity:"
-                        className="input-text qty"
-                      />
-                      <button
-                        className="increase items-count"
-                        type="button"
-                      >
-                        <i className="lnr lnr-chevron-up"></i>
-                      </button>
-                      <button
-                        className="reduced items-count"
-                        type="button"
-                      >
-                        <i className="lnr lnr-chevron-down"></i>
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <h5>$720.00</h5>
-                  </td>
-                </tr>
+              )}
                 <tr className="bottom_button">
                   <td>
                     <a className="gray_btn" href="#">Update Cart</a>

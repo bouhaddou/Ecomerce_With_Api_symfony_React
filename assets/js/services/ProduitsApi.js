@@ -12,9 +12,10 @@ function findbyId(id){
                 .get("http://localhost:8000/api/produits/" + id)
                 .then(response => response.data);
 }
-        
+
+     
  
 export default{
     findAll,
-    findbyId
+    findbyId,
 };

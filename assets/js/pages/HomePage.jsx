@@ -9,7 +9,7 @@ import Slider from '../Component/Slider';
 const HomePage = (props) => {
     return ( <>
             <Slider />
-            <Produits />
+            <Produits setCartItems={props.setCartItems} />
             <ProductArea />
             <ProductAreaPro />
             <BlogPage />
