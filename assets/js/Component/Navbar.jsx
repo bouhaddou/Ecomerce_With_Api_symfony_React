@@ -3,17 +3,20 @@ import { Link } from 'react-router-dom';
 
 
 const Navbar = ({cartItems}) => {
-
+console.log(cartItems)
 const [cart, setCart] = useState([])
 
 useEffect(() => {
  const data =  localStorage.getItem("produits");
  if(Array.isArray(JSON.parse(data))){
    
-  setCart(JSON.parse(data));
+  setCart(cartItems);
  }
+
 },[])
-return ( 
+
+
+ return ( 
     <>
   <header className="header_area">
     <div className="top_menu">
@@ -126,7 +129,7 @@ return (
                   <li className="nav-item submenu dropdown">
                     <a  className="nav-link dropdown-toggle icons" data-toggle="dropdown" role="button" aria-haspopup="true"
                       aria-expanded="false"><i className="ti-shopping-cart"></i> <span className="badge badge-info">
-                        { cart.length}</span></a>
+                        {cartItems && cartItems.length}</span></a>
                     <ul className="dropdown-menu ">
                       <table className="table table-hover">
                         <thead>
@@ -139,7 +142,7 @@ return (
                         </thead>
                         <tbody>
                        
-                            { cart.map(produit => 
+                            {cartItems && cartItems.map(produit => 
                               <tr key={produit.id}>
                                   <td> <Link to="/cart"><i className="fas fa-eye"></i></Link></td>
                                   <td>{produit.id}</td>

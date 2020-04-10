@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import produitsApi from '../services/produitsApi';
 import { Link } from 'react-router-dom';
 
 const Produits = ({setCartItems}) => {
 
   const [produits,setProduits] = useState({});
+  const [edi,setEdi] = useState(false);
 
   
 
@@ -24,21 +24,51 @@ useEffect(() => {
  
 }, []);
 
+// const {value, name ,id} = event.currentTarget;
+//      const data =  localStorage.getItem("produits");
+//       const resu =JSON.parse(data);
+    
+//   }
+//   localStorage.removeItem("produits")
+//   localStorage.setItem("produits",JSON.stringify(resu))
+
+
+
+
 const handleShop =(param) => {
 const {id, avatar,title, prix} = param;
 const items = JSON.parse(localStorage.getItem("produits")) 
+const quantity= 1;
+console.log(items)
 if(Array.isArray(items)){
-  items.push({id, avatar,title, prix})
+  for(let i=0;i< items.length;i++)
+    {
+      console.log(items[i].id)
+     if(id == items[i].id){
+      items[i].quantity = parseFloat(items[i].quantity  + 1)
+      setEdi(true); 
+      localStorage.removeItem("produits")
+      localStorage.setItem("produits",JSON.stringify(items))
+      setCartItems(items)
+      break
+    }
+    
+  }
+  if(edi == true){
+  items.push({id, avatar,title, prix,quantity})
   localStorage.setItem("produits",JSON.stringify(items))
   setCartItems(items)
+  setEdi(false)
+ 
+  }
+  
 }else{
-  localStorage.setItem("produits",JSON.stringify([{id, avatar, title, prix}]))
+  localStorage.removeItem("produits")
+  localStorage.setItem("produits",JSON.stringify([{id, avatar, title, prix,quantity}]))
   setCartItems(items)
 } 
 }
 
-
-  
 
 
    if(!produits){
@@ -60,10 +90,10 @@ if(Array.isArray(items)){
               <div className="single-product">
                 <div className="product-img">
                   <img className="img-fluid w-100" src={produit.avatar}  />
-                  <div className="p_icon"><a >
-                      <Link  to={"/ProductInfo/" + produit.id }>
+                  <div className="p_icon">
+                      <Link  to={"/ProductInfo/" + produit.id } >
                         <i className="ti-eye"></i>
-                      </Link></a>
+                      </Link>
                       <a href="#"> <i className="ti-heart"></i></a>
                       <a 
                       onClick={() => handleShop(produit)}

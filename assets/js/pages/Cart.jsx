@@ -1,21 +1,60 @@
 import React, { useState, useEffect } from 'react';
+import Field from '../Component/forms/Field';
 
 
-const Cart = () => {
+const Cart = ({setCartItems}) => {
 
 
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState({
+    id:"", 
+    avatar:"",
+    title:"", 
+    prix:"",
+    quantity:""
+  });
 
   useEffect(() => {
    const data =  localStorage.getItem("produits");
    if(Array.isArray(JSON.parse(data))){
-     
     setCart(JSON.parse(data));
+    setCartItems(JSON.parse(data))
    }
   },[])
 
+  const handleChange = event =>{
+    const {value, name ,id} = event.currentTarget;
+     const data =  localStorage.getItem("produits");
+      const resu =JSON.parse(data);
+    for(let i=0;i<resu.length;i++)
+    {
+     if(id == resu[i].id){
+     resu[i].quantity = parseFloat(value)
+    }
+  }
+  localStorage.removeItem("produits")
+  localStorage.setItem("produits",JSON.stringify(resu))
+  const data2 = localStorage.getItem("produits");
+  setCart(JSON.parse(data2));
+  setCartItems(JSON.parse(data))
+}
 
-    return ( <>
+const handleRemoveItem = (event) =>{
+
+
+  const  name = event.currentTarget.id;
+  const dat = localStorage.getItem("produits");
+  const del = JSON.parse(dat);
+  const aaa =  del.filter(item => item.id !== parseFloat(name))
+  localStorage.removeItem("produits")
+  localStorage.setItem("produits",JSON.stringify(aaa))
+  const data2 = localStorage.getItem("produits");
+  setCart(JSON.parse(data2));
+  setCartItems(JSON.parse(data2))
+ 
+}
+
+
+   if(!cart){return <div>loading</div>}else{ return ( <>
     
     <section className="banner_area">
       <div className="banner_inner d-flex align-items-center">
@@ -43,74 +82,68 @@ const Cart = () => {
               <thead>
                 <tr>
                   <th scope="col">Produit</th>
+                  <th scope="col">titre</th>
                   <th scope="col">Prix</th>
                   <th scope="col">Quantité</th>
                   <th scope="col">Montant Total</th>
+                  <th scope="col">Supprimer</th>
                 </tr>
               </thead>
               <tbody>
-              {cart.map(produit =>
-                <tr>
+              {cart.length >0 && cart.map(produit =>
+                <tr key={produit.id}>
                   <td>
-                    <div className="media">
-                      <div className="d-flex w-50 h-25">
-                        <img className="w-25 h-20"
+                      <div className=" imag-pro">
+                        <img className=""
                           src={produit.avatar}
                           alt=""
                         />
                       </div>
-                      <div className="media-body">
-                          <p>{produit.title}</p>
-                      </div>
+                  </td>
+                  <td><div className=" ">
+                          <p>{produit.title}</p> 
+                      </div></td>
+                  <td>
+                    <h5 className="prix">{produit.prix} Dirhams </h5> 
+                  </td>
+                  <td>
+                    <div className="prix">
+                    <input type="number" className="form-control"     id={produit.id}  name="quantity"  onChange={handleChange} value={produit.quantity} />
                     </div>
                   </td>
                   <td>
-                    <h5>{produit.prix}</h5>
+                    <h5>720.00 Dirhams</h5>
                   </td>
                   <td>
-                    <div className="product_count">
-                      <input
-                        type="text"
-                        className="input-text qty"
-                      />
-                      <button
-                        className="increase items-count"
-                        type="button"
-                      >
-                        <i className="lnr lnr-chevron-up"></i>
-                      </button>
-                      <button
-                        className="reduced items-count"
-                        type="button"
-                      >
-                        <i className="lnr lnr-chevron-down"></i>
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <h5>$720.00</h5>
+                    <button onClick={handleRemoveItem} id={produit.id} className="btn btn-danger">X</button>
                   </td>
                 </tr>
               )}
-                <tr className="bottom_button">
+                <tr>
+                  <td></td>
+                  <td></td>
                   <td>
-                    <a className="gray_btn" href="#">Update Cart</a>
+                    <h5>Total</h5>
                   </td>
+                  <td>
+                    <h5>$2160.00</h5>
+                  </td>
+                </tr>
+                <tr className="shipping_area">
                   <td></td>
                   <td></td>
                   <td>
-                    <div className="cupon_text">
-                      <input type="text" placeholder="Coupon Code" />
-                      <a className="main_btn" href="#">Apply</a>
-                      <a className="gray_btn" href="#">Close Coupon</a>
-                    </div>
+                    <h5>Total</h5>
+                  </td>
+                  <td>
+                    <h5>$2160.00</h5>
                   </td>
                 </tr>
                 <tr>
                   <td></td>
                   <td></td>
                   <td>
-                    <h5>Subtotal</h5>
+                    <h5>Total</h5>
                   </td>
                   <td>
                     <h5>$2160.00</h5>
@@ -138,22 +171,6 @@ const Cart = () => {
                           <a href="#">Local Delivery: $2.00</a>
                         </li>
                       </ul>
-                      <h6>
-                        Calculate Shipping
-                        <i className="fa fa-caret-down" aria-hidden="true"></i>
-                      </h6>
-                      <select className="shipping_select">
-                        <option value="1">Bangladesh</option>
-                        <option value="2">India</option>
-                        <option value="4">Pakistan</option>
-                      </select>
-                      <select className="shipping_select">
-                        <option value="1">Select a State</option>
-                        <option value="2">Select a State</option>
-                        <option value="4">Select a State</option>
-                      </select>
-                      <input type="text" placeholder="Postcode/Zipcode" />
-                      <a className="gray_btn" href="#">Update Details</a>
                     </div>
                   </td>
                 </tr>
@@ -176,6 +193,5 @@ const Cart = () => {
     </section>
 
     </> );
-}
- 
+}}
 export default Cart;

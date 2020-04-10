@@ -30,13 +30,12 @@ const App = () => {
     const [cartItems, setCartItems] = useState([])
 
     const fetchProduits =  () =>{
-        const items = JSON.parse(localStorage.getItem("ids")) 
+        const items = JSON.parse(localStorage.getItem("produits")) 
         setCartItems(items)
     }
     
     useEffect(() => {
         fetchProduits();
-     
     }, []);
    
    
@@ -50,7 +49,9 @@ const App = () => {
                    return <Shop setCartItems={setCartItems} {...props} /> 
                 }} />
                 <Route path="/ProductInfo/:id" component={ProductInfo} />
-                <Route path="/cart" component={Cart} />
+                <Route path="/cart" render={props=>{
+                   return <Cart setCartItems={setCartItems} {...props} /> 
+                }} />
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/contact" component={Contact} />
                 <Route path="/blog" component={BlogPage} />
