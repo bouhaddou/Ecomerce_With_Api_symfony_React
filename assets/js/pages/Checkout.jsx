@@ -38,22 +38,63 @@ const Checkout = () => {
     email : "",
     password : ""
   })
-  const [shop,setShop] = useState({
+  const [shop,setShop] = useState([{
     produit:"",
     client:"",
+    quantity:"",
     type:""
-  })
+  }])
   const [produit,setProduit] = useState({})
 
+  const getAllproduit = () =>{
+    const donnee = JSON.parse(localStorage.getItem("product"));
+    setProduit(donnee)
 
-  const handlSubmit= event =>{
-    event.preventDefault();
-    axios.post("http://localhost:8000/api/clients",client)
-    .then(Response => console.log(Response))
   }
+
+  const handlemss = () =>{ 
+    $('.bihi').on('click', function(){  $('.bihibihi').slideToggle();});
+    $('.coponclick').on('click', function(){ $('.copponhide').slideToggle();});
+    $('.passshow').on('click', function(){  $('.passshide').slideToggle();});
+    $('.adressshow').on('click', function(){$('.adresshide').slideToggle();});
+  }
+
+ useEffect(() =>{
+ 
+  console.log(shop) 
+  getAllproduit()
+  console.log(shop) 
+
+  calculTotal()
+  $('.bihibihi').hide(); $('.copponhide').hide(); $('.passshide').hide(); $('.adresshide').hide();
+ },[])
+
+  const handlSubmit = event => {
+    event.preventDefault();
+    // const response = axios.post("http://localhost:8000/api/clients",client)
+    // .then(response =>response.data["hydra:member"])
+    const idclient = 2
+    const element =[]
+       const donnee = JSON.parse(localStorage.getItem("product"));
+   const typ = shop.type
+    for( let i=0 ; i < donnee.length; i++ )
+    { 
+      element.push({produit:donnee[i].id,client:idclient,quantity:donnee[i].quantite,type:typ})
+    }  
+     
+    console.log(element)
+    
+      axios.post("http://localhost:8000/api/shops", {
+            ...shop,   produit : `/api/produits/${shop.produit}`, client : `/api/clients/${shop.client}`, 
+          });
+       
+}
+
+
   const handleChange = event =>{
     const {name,value} = event.currentTarget;
     setClient({...client, [name]:value})
+    setShop({...shop, [name]: value})
   }
 
 
@@ -63,32 +104,8 @@ const Checkout = () => {
     setMontant(parseFloat(montant));
   }
 
-  const handlemss = () =>{
-    $('.bihi').on('click', function(){
-      $('.bihibihi').slideToggle();
-      
-   });
-   $('.coponclick').on('click', function(){
-    $('.copponhide').slideToggle();
-  });
-  $('.passshow').on('click', function(){
-    $('.passshide').slideToggle();
-  });
-  $('.adressshow').on('click', function(){
-    $('.adresshide').slideToggle();
-  });
-   
-  }
+  console.log(shop.produit)
 
- useEffect(() =>{
-  calculTotal()
-  $('.bihibihi').hide()
-  $('.copponhide').hide();
-  $('.passshide').hide();
-  $('.adresshide').hide();
- })
-
-console.log(client)
     return ( <>
     
     <section className="banner_area">
@@ -295,22 +312,20 @@ console.log(client)
                     </a>
                   </li>
                 </ul>
-                <div className="payment_item">
-                  <div className="radion_btn">
-                    <input type="radio" id="f-option5" name="selector" />
-                    <label htmlFor="f-option5">Le paiement par chèque</label>
-                    <div className="check"></div>
+                <div className="">
+                  <div className="form-group">
+                    <input className="" type="radio" id="option1" value="CHEQUE" name="type"   onChange={handleChange} />
+                    <label htmlFor="option1">Le paiement par chèque </label>
                   </div>
                   <p>
                   Effectuez un virement vers l'un des noms mentionnés puis envoyez-nous 
                   le numéro de virement pour confirmer 
                   </p>
                 </div>
-                <div className="payment_item active">
-                  <div className="radion_btn">
-                    <input type="radio" id="f-option6" name="selector" />
-                    <label htmlFor="f-option6">Paiement à réception </label>
-                    <div className="check"></div>
+                <div className=" ">
+                  <div className="form-group">
+                  <input className="" type="radio" id="option12" value="RECEPTION" name="type"   onChange={handleChange} />
+                    <label htmlFor="option12">Paiement à réception </label>
                   </div>
                   <p>
                     Payez à la livraison directement.                 
@@ -321,7 +336,7 @@ console.log(client)
                   <label htmlFor="f-option4">J'ai lu et j'accepte les </label>
                   <a href="#"> conditions &  générales *</a>
                 </div>
-                <a className="main_btn" href="#">Confirmer la commande</a>
+                <button type="submit" className="main_btn" >Confirmer la commande</button>
               </div>
             </div>
           </div>
