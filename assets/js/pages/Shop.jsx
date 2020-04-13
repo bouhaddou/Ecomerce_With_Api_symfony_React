@@ -1,6 +1,7 @@
 import React from 'react';
 import Produits from './produits';
 import { Link } from 'react-router-dom';
+import ProductAreaPro from './ProductAreaPro';
 
 
 const Shop = (props) => {
@@ -33,7 +34,7 @@ const Shop = (props) => {
                         <div className="left_sidebar_area">
                             <aside className="left_widgets p_filter_widgets">
                                 <div className="l_w_title">
-                                <h3>Product Brand</h3>
+                                <h3>Les Produits</h3>
                                 </div>
                                 <div className="widgets_inner">
                                 <ul className="list">
@@ -57,31 +58,6 @@ const Shop = (props) => {
                             </aside>
                             <aside className="left_widgets p_filter_widgets">
                                 <div className="l_w_title">
-                                <h3>Color Filter</h3>
-                                </div>
-                                <div className="widgets_inner">
-                                    <ul className="list">
-                                        <li>
-                                            <a href="#">Black</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Black Leather</a>
-                                        </li>
-                                        <li className="active">
-                                            <a href="#">Black with red</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Gold</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Spacegrey</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </aside>
-
-                            <aside className="left_widgets p_filter_widgets">
-                                <div className="l_w_title">
                                 <h3>Price Filter</h3>
                                 </div>
                                 <div className="widgets_inner">
@@ -99,6 +75,7 @@ const Shop = (props) => {
                 </div>
             </div>
         </section>
+        <ProductAreaPro />
 
     </> );
 }

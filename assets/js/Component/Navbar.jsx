@@ -3,19 +3,20 @@ import { Link } from 'react-router-dom';
 
 
 const Navbar = ({cartItems}) => {
-console.log(cartItems)
-const [cart, setCart] = useState([])
-
-useEffect(() => {
- const data =  localStorage.getItem("produits");
- if(Array.isArray(JSON.parse(data))){
-   
-  setCart(cartItems);
- }
-
+  const fetchProduit= async () =>{
+    try{
+      const donnee = JSON.parse(localStorage.getItem("product"))
+      if(donnee)
+      {
+        cartItems(donnee);
+      }
+    }catch(error){
+        console.log(error.response);
+    }
+}
+useEffect(() =>{
+  fetchProduit();
 },[])
-
-
  return ( 
     <>
   <header className="header_area">
@@ -56,7 +57,7 @@ useEffect(() => {
       <div className="container">
         <nav className="navbar navbar-expand-lg navbar-light w-100">
           <Link className="navbar-brand logo_h" to="/">
-            <img className="logo" src="img/logo.png" alt="" />
+            {/* <img className="logo" src="img/logo.png" alt="" /> */} dattes Aljinan
           </Link>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,16 +77,13 @@ useEffect(() => {
                       aria-expanded="false">Produits</a>
                     <ul className="dropdown-menu">
                       <li className="nav-item">
-                        <Link className="nav-link" to="/shop">Produits</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/ProductInfo">Détail Produit</Link>
-                      </li>
-                      <li className="nav-item">
-                      <Link className="nav-link" to="/checkout">Paiement </Link>
+                        <Link className="nav-link" to="/produits">Produits</Link>
                       </li>
                       <li className="nav-item">
                         <Link className="nav-link" to="/cart">Cart </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link className="nav-link" to="/checkout">Paiement </Link>
                       </li>
                     </ul>
                   </li>
@@ -94,10 +92,10 @@ useEffect(() => {
                       aria-expanded="false">Blog</a>
                     <ul className="dropdown-menu">
                       <li className="nav-item">
-                      <Link className="nav-link" to="/blog">Blog </Link>
+                      <Link className="nav-link" to="/blogPage">Blog </Link>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link" href="single-blog.html">Blog Details</a>
+                        <a className="nav-link" href="">Blog Details</a>
                       </li>
                     </ul>
                   </li>
@@ -118,18 +116,14 @@ useEffect(() => {
                   </li>
                 </ul>
               </div>
-
               <div className="col-lg-5 pr-0">
                 <ul className="nav navbar-nav navbar-right right_nav pull-right">
-                  <li className="nav-item">
-                    <a href="#" className="icons">
-                      <i className="ti-search" aria-hidden="true"></i>
-                    </a>
-                  </li>
                   <li className="nav-item submenu dropdown">
-                    <a  className="nav-link dropdown-toggle icons" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false"><i className="ti-shopping-cart"></i> <span className="badge badge-info">
-                        {cartItems && cartItems.length}</span></a>
+                    <a  className="nav-link dropdown-toggle icons text-danger" data-toggle="dropdown" role="button" aria-haspopup="true"
+                      aria-expanded="false"> Panier 
+                      <span className=""> {cartItems && cartItems.length}</span> Produits 
+                      <i className="ti-shopping-cart fa-3x text-danger"></i></a>
+                   
                     <ul className="dropdown-menu ">
                       <table className="table table-hover">
                         <thead>
@@ -141,8 +135,7 @@ useEffect(() => {
                           </tr>
                         </thead>
                         <tbody>
-                       
-                            {cartItems && cartItems.map(produit => 
+                            { cartItems && cartItems.map(produit =>  
                               <tr key={produit.id}>
                                   <td> <Link to="/cart"><i className="fas fa-eye"></i></Link></td>
                                   <td>{produit.id}</td>
@@ -150,24 +143,11 @@ useEffect(() => {
                                     <img className="w-100 h-15" src={produit.avatar} />
                                   </td>
                                   <td>{produit.prix}</td>
-                                  
-                              </tr>
-                            )}
+                              </tr> 
+                             )}
                         </tbody>
                      </table>
                     </ul>
-                  </li>
-
-                  <li className="nav-item">
-                    <a href="#" className="icons">
-                      <i className="ti-user" aria-hidden="true"></i>
-                    </a>
-                  </li>
-
-                  <li className="nav-item">
-                    <a href="#" className="icons">
-                      <i className="ti-heart" aria-hidden="true"></i>
-                    </a>
                   </li>
                 </ul>
               </div>

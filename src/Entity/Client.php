@@ -50,6 +50,26 @@ class Client
      */
     private $shops;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $company;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $phone;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $paye;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $postal;
+
     public function __construct()
     {
         $this->shops = new ArrayCollection();
@@ -147,6 +167,54 @@ class Client
                 $shop->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?string
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?string $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getPaye(): ?string
+    {
+        return $this->paye;
+    }
+
+    public function setPaye(string $paye): self
+    {
+        $this->paye = $paye;
+
+        return $this;
+    }
+
+    public function getPostal(): ?int
+    {
+        return $this->postal;
+    }
+
+    public function setPostal(int $postal): self
+    {
+        $this->postal = $postal;
 
         return $this;
     }

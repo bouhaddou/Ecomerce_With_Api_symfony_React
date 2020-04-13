@@ -393,7 +393,7 @@ body{line-height:24px;
     .banner_inner 
     .banner_content 
     .page_link a:hover{color:#71cd14}
-    .offer_area{background:url(/img/offer-bg.png) no-repeat center;
+    .offer_area{
     background-size:cover}@media (max-width: 991px){
         .offer_area{background:#f6f6f6}}
     .offer_content{padding:132px 0px}@media (max-width: 991px){
@@ -2082,8 +2082,9 @@ body{line-height:24px;
                 font-weight:500;
                 font-family:"Roboto",sans-serif;
                 color:#797979;
-                border-bottom:0px !important}.cart_inner .table tbody tr td{padding-top:30px;
-                padding-bottom:30px;
+                border-bottom:0px !important}
+                .cart_inner .table tbody tr td{
+                    
                 vertical-align:middle;
                 align-self:center}.cart_inner .table tbody tr td .media .d-flex{padding-right:30px}.cart_inner .table tbody tr td .media .d-flex img{border:1px solid #eeeeee;
                 border-radius:3px}.cart_inner .table tbody tr td .media .media-body{vertical-align:middle;

@@ -1,28 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import produitsApi from '../services/produitsApi';
+import Produits from './Produits';
 
 
-const ProductInfo = ({match}) => {
-  const  id  = match.params.id;
+const ProductInfo = (props) => {
+  const  par  = props.match.params.id;
   const [produit,setProduit] = useState(undefined);
-  
+  const [edi,setEdi] = useState(false);
+  const [cart, setCart] = useState({});
+
 
 
   const fetchProduit= async () =>{
     try{
-     const  {ref,title,content,prix,setAt,observation,avatar,images} = await produitsApi.findbyId(id)
-           setProduit({ref,title,content,prix,setAt,observation,avatar,images})
-
+     const  {id,ref,title,content,prix,setAt,observation,avatar,images} = await produitsApi.findbyId(par)
+      setProduit({id,ref,title,content,prix,setAt,observation,avatar,images})
+      const quantite = 1
+      setCart({id,title,avatar,prix,quantite})
+      const donnee = JSON.parse(localStorage.getItem("product"))
+      if(donnee !== null)
+      {
+        const  existid = donnee.filter(pro => pro.id === id)
+        if(existid.length > 0)
+        {
+          setCart({...cart, quantite: existid[0].quantite})
+        }
+      }
+           
     }catch(error){
         console.log(error.response);
     }
 }
 useEffect(() =>{
   fetchProduit();
-  
+ 
 },[])
 
+const handleShop =(param) => {
+  const data = localStorage.getItem("product")
+  if(data === null)
+  {
+    const quantite= 1
+    const {id,title, avatar, prix} = param
+    localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantite}]))
+    props.setCartItems({id,title, avatar, prix,quantite})
+  }else{
+    const {id,title, avatar, prix} = param
+    const proLocal = JSON.parse(localStorage.getItem("product"));
+    const  existid = proLocal.filter(produit => produit.id === id)
+    if(existid.length > 0)
+    {
+      const index = proLocal.findIndex(x => x.id === existid[0].id )
+      proLocal[index].quantite = cart.quantite 
+      localStorage.removeItem("product") 
+      localStorage.setItem("product",JSON.stringify(proLocal))
+      props.setCartItems(proLocal)
+    }else{
+    const quantite= 1
+    proLocal.push({id,title, avatar, prix,quantite})
+    localStorage.setItem("product",JSON.stringify(proLocal))
+    props.setCartItems(proLocal)
+    }
+  }
+}
 
+  const handleChange = event =>{
+    const {id,avatar,title, prix} = produit;
+    setCart({id,avatar,title, prix});
+    const {value, name}  = event.currentTarget;
+    setCart({...cart, [name]: parseFloat(value)})
+  }
   if(!produit){ return <div>loading</div>}else{  return ( <>
      <section className="banner_area">
       <div className="banner_inner d-flex align-items-center">
@@ -57,7 +104,8 @@ useEffect(() =>{
                 <ol className="carousel-indicators">
               
                 {produit.images.map(function(image, index) {  
-                  return <li key={image.id} data-target="#carouselExampleIndicators" data-slide-to={index} className={"  " + (index == 0 && " active ")}>
+                  return <li key={image.id} data-target="#carouselExampleIndicators" 
+                  data-slide-to={index} className={"  " + (index == 0 && " active ")}>
                     <img className="w-100 h-100" src={image.path} alt=""/>
                   </li>
                 } )}
@@ -82,7 +130,7 @@ useEffect(() =>{
           <div className="col-lg-5 offset-lg-1">
             <div className="s_product_text">
               <h3>{produit.title}</h3>
-              <h2>{ produit.prix } Dirhams</h2>
+              <h2>{ produit.prix.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') } Dirhams</h2>
               <ul className="list">
                 <li>
                   <a className="active" href="#">
@@ -95,27 +143,31 @@ useEffect(() =>{
               <p>
                {produit.content}
               </p>
-              <div className="product_count">
-                <label htmlFor="qty">Quantité:</label>
-                <input
-                  type="number"
-                  className="input-text qty"
-                />
-                <button
-                  className="increase items-count"
-                  type="button"
-                >
-                  <i className="lnr lnr-chevron-up"></i>
-                </button>
-                <button
-                  className="reduced items-count"
-                  type="button"
-                >
-                  <i className="lnr lnr-chevron-down"></i>
-                </button>
+              
+                <div className="row">
+                  <div className="col-md-3">  
+                  <div className="form-group">
+                    <label className="h5" >Quantité:  {}</label></div>
+                  </div>
+                  <div className="col-md-4">
+                  <div className="form-group">
+
+                  <input type="number" 
+                  className="form-control" 
+                  id={cart.quantite}  
+                  name="quantite"  
+                  onChange={handleChange} 
+                  value={cart.quantite} />
+                   
+                  </div>
+                  </div>
+                  <div className="col h6">kg</div>
               </div>
               <div className="card_area">
-                <a className="main_btn" href="#">Ajouter au panier</a>
+                
+                <a className="main_btn" 
+                onClick={() => handleShop(produit)}
+                >Ajouter au panier</a>
                 <a className="icon_btn" href="#">
                   <i className="lnr lnr lnr-diamond"></i>
                 </a>

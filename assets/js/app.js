@@ -23,6 +23,7 @@ import Checkout from './pages/checkout';
 import Cart from './pages/cart';
 import Contact from './pages/contact';
 import BlogPage from './pages/BlogPage';
+import Produits from './pages/produits';
 
 
 
@@ -45,16 +46,18 @@ const App = () => {
         <HashRouter>
                 <Navbar cartItems={cartItems} />
                 <Switch>
-                <Route  path="/shop" render={props=>{
-                   return <Shop setCartItems={setCartItems} {...props} /> 
+                <Route  path="/produits" render={props=>{
+                   return <Produits setCartItems={setCartItems} {...props} /> 
                 }} />
-                <Route path="/ProductInfo/:id" component={ProductInfo} />
+                <Route path="/ProductInfo/:id" render={props=>{
+                   return <ProductInfo setCartItems={setCartItems} {...props} /> 
+                }} />
                 <Route path="/cart" render={props=>{
                    return <Cart setCartItems={setCartItems} {...props} /> 
                 }} />
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/contact" component={Contact} />
-                <Route path="/blog" component={BlogPage} />
+                <Route path="/blogPage" component={BlogPage} />
                 <Route path="/" render={props=>{
                    return <HomePage setCartItems={setCartItems} {...props} /> 
                 }} />

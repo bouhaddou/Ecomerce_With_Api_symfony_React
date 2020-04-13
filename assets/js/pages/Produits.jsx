@@ -1,119 +1,178 @@
 import React, { useState, useEffect } from 'react';
 import produitsApi from '../services/produitsApi';
 import { Link } from 'react-router-dom';
+import ProductAreaPro from './ProductAreaPro';
 
-const Produits = ({setCartItems}) => {
+const Produits = (props) => {
 
-  const [produits,setProduits] = useState({});
+  const [produits,setProduits] = useState({
+
+  });
+  const [filterProduit,setFilterProduit] = useState({});
+  const [bestProduct,setBestProduct] = useState({});
   const [edi,setEdi] = useState(false);
 
   
-
+  
 
   const fetchProduits = async () =>{
     try{
      const data = await  produitsApi.findAll();
          setProduits(data);
+         setFilterProduit(data.slice(0,6))
+         const nombre = Math.floor(Math.random() * (data.length - 1 + 1)) + 1;
+         setBestProduct(data[nombre])
+
    }catch(error){
        console.log(error.response)
    }
 }
 
+
+
 useEffect(() => {
   fetchProduits();
- 
 }, []);
-
-// const {value, name ,id} = event.currentTarget;
-//      const data =  localStorage.getItem("produits");
-//       const resu =JSON.parse(data);
-    
-//   }
-//   localStorage.removeItem("produits")
-//   localStorage.setItem("produits",JSON.stringify(resu))
-
 
 
 
 const handleShop =(param) => {
-const {id, avatar,title, prix} = param;
-const items = JSON.parse(localStorage.getItem("produits")) 
-const quantity= 1;
-console.log(items)
-if(Array.isArray(items)){
-  for(let i=0;i< items.length;i++)
-    {
-      console.log(items[i].id)
-     if(id == items[i].id){
-      items[i].quantity = parseFloat(items[i].quantity  + 1)
-      setEdi(true); 
-      localStorage.removeItem("produits")
-      localStorage.setItem("produits",JSON.stringify(items))
-      setCartItems(items)
-      break
-    }
-    
-  }
-  if(edi == true){
-  items.push({id, avatar,title, prix,quantity})
-  localStorage.setItem("produits",JSON.stringify(items))
-  setCartItems(items)
-  setEdi(false)
- 
-  }
-  
-}else{
-  localStorage.removeItem("produits")
-  localStorage.setItem("produits",JSON.stringify([{id, avatar, title, prix,quantity}]))
-  setCartItems(items)
-} 
-}
 
+  const data = localStorage.getItem("product")
+        if(data === null)
+        {
+          const quantite= 1
+          const {id,title, avatar, prix} = param
+          localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantite}]))
+          props.setCartItems({id,title, avatar, prix,quantite})
+        }else{
+          const {id,title, avatar, prix} = param
+          const proLocal = JSON.parse(localStorage.getItem("product"));
+          const  existid = proLocal.filter(produit => produit.id === id)
+          if(existid.length > 0)
+          {
+            const index = proLocal.findIndex(x => x.id === existid[0].id )
+            proLocal[index].quantite = proLocal[index].quantite + 1
+            localStorage.removeItem("product") 
+            localStorage.setItem("product",JSON.stringify(proLocal))
+            props.setCartItems(proLocal)
+          }else{
+          const quantite= 1
+          proLocal.push({id,title, avatar, prix,quantite})
+          localStorage.setItem("product",JSON.stringify(proLocal))
+          props.setCartItems(proLocal)
+          }
+        }
+}
 
 
    if(!produits){
       return <div>loading</div>}else{ return ( <>
-  <section className="inspired_product_area section_gap_bottom_custom">
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-lg-12">
-          <div className="main_title">
-            <h2><span className="text-success"> Produits</span></h2>
-            <p>Les meilleurs types de dattes au Royaume du Maroc</p>
-          </div>
-        </div>
-      </div>
+  
+        <section className="cat_product_area section_gap">
+            <div className="container">
+                <div className="row flex-row-reverse">
+                    <div className="col-lg-9">
+                    <section className="inspired_product_area section_gap_bottom_custom">
+                    <div className="container">
+                      <div className="row justify-content-center">
+                        <div className="col-lg-12">
+                          <div className="main_title">
+                            <h2><span className="text-success"> Produits</span></h2>
+                            <p>Les meilleurs types de dattes au Royaume du Maroc</p>
+                          </div>
+                        </div>
+                      </div>
 
-      <div className="row">
-          {produits.length >0 && produits.map(produit =>
-            <div key={produit.id} className="col-lg-4 col-md-6 col-sm-12">
-              <div className="single-product">
-                <div className="product-img">
-                  <img className="img-fluid w-100" src={produit.avatar}  />
-                  <div className="p_icon">
-                      <Link  to={"/ProductInfo/" + produit.id } >
-                        <i className="ti-eye"></i>
-                      </Link>
-                      <a href="#"> <i className="ti-heart"></i></a>
-                      <a 
-                      onClick={() => handleShop(produit)}
-                      > <i className="ti-shopping-cart"></i> </a>
-                  </div>
+                      <div className="row">
+                          {produits.length >0 && produits.map(produit =>
+                            <div key={produit.id} className="col-lg-4 col-md-6 col-sm-12">
+                              <div className="single-product">
+                                <div className="product-img">
+                                  <img className="img-fluid w-100" src={produit.avatar}  />
+                                  <div className="p_icon">
+                                      <Link  to={"/ProductInfo/" + produit.id } >
+                                        <i className="ti-eye"></i>
+                                      </Link>
+                                      <a href="#"> <i className="ti-heart"></i></a>
+                                      <a 
+                                      onClick={() => handleShop(produit)}
+                                      > <i className="ti-shopping-cart"></i> </a>
+                                  </div>
+                                </div>
+                                <div className="product-btm">
+                                  <Link className="d-block text-center " to={"/ProductInfo/" + produit.id }>
+                                  <h4 className="text-info">{produit.title.slice(0,22)}</h4>
+                                  </Link>
+                                  <div className="mt-3 text-center">
+                                    <h6 className="mr-4 text-center text-danger">{produit.prix.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dirhams</h6>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  </section>
+
+                    </div>
+                    <div className="col-lg-3">
+                        <div className="left_sidebar_area">
+                            <aside className="left_widgets p_filter_widgets">
+                                <div className="l_w_title">
+                                <h3>Les dattes</h3>
+                                </div>
+                                <div className="widgets_inner">
+                                <ul className="list">
+                                {filterProduit.length > 0 && filterProduit.map(produit =>  
+                                    <li key={produit.id}>
+                                        <Link className="d-block text-center " to={"/ProductInfo/" + produit.id }> {produit.title}</Link>
+                                    </li>
+                                )}
+                                </ul>
+                                </div>
+                            </aside>
+                            <aside className="left_widgets p_filter_widgets">
+                                <div className="l_w_title">
+                                <h3>Facebook</h3>
+                                </div>
+                                <div className="widgets_inner">
+                                <div className="range_item">
+                                    <div id="slider-range"></div>
+                                    <div className="">
+                                        <label htmlFor="amount">Price : </label>
+                                        <input type="text" id="amount" readOnly />
+                                    </div>
+                                </div>
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
                 </div>
-                <div className="product-btm">
-                  <Link className="d-block text-center " to={"/ProductInfo/" + produit.id }>
-                  <h4 className="text-info">{produit.title.slice(0,22)}</h4>
-                  </Link>
-                  <div className="mt-3 text-center">
-                    <h6 className="mr-4 text-center text-danger">{produit.prix} Dirhams</h6>
-                  </div>
-                </div>
-              </div>
             </div>
-           )}
-      </div>
-    </div>
-  </section>
+        </section>
+        <section className="offer_area">
+        <div className="container">
+            <div className="row justify-content-center">
+                <div className="col-lg-5  ">
+                  <div className="" >
+                      <img  className="img-fluid h-100 rounded" src={bestProduct.avatar} />
+                  </div>
+                </div>
+                <div className="col-lg-7 text-center">
+                  <div className="offer_content">
+                      <h3 className="text-uppercase mb-40">{bestProduct.title}</h3>
+                      <h3 className="text-uppercase">30% de promotion</h3>
+                      <a href="#" className="main_btn mb-20 mt-5">voir plus</a>
+                      <div className=" product-btm mt-3">
+                      Prix <span className="mr-4"><strong>{bestProduct.prix} </strong>dirhams</span>
+                      <del>{(bestProduct.prix * 1.20)} dirhams</del>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+  </section>                          
     
     </> );
 }

@@ -50,9 +50,9 @@ const Slider = () => {
           <div className="single-feature">
             <a href="#" className="title">
               <i className="flaticon-money"></i>
-              <h3>Money back gurantee</h3>
+              <h3>Garantie de remboursement</h3>
             </a>
-            <p>Shall open divide a one</p>
+            <p>...</p>
           </div>
         </div>
 
@@ -60,9 +60,9 @@ const Slider = () => {
           <div className="single-feature">
             <a href="#" className="title">
               <i className="flaticon-truck"></i>
-              <h3>Free Delivery</h3>
+              <h3>Livraison à domicile</h3>
             </a>
-            <p>Shall open divide a one</p>
+            <p>...</p>
           </div>
         </div>
 
@@ -70,9 +70,9 @@ const Slider = () => {
           <div className="single-feature">
             <a href="#" className="title">
               <i className="flaticon-support"></i>
-              <h3>Alway support</h3>
+              <h3>Contacte</h3>
             </a>
-            <p>Shall open divide a one</p>
+            <p>7/24</p>
           </div>
         </div>
 
@@ -80,9 +80,9 @@ const Slider = () => {
           <div className="single-feature">
             <a href="#" className="title">
               <i className="flaticon-blockchain"></i>
-              <h3>Secure payment</h3>
+              <h3>PAIEMENT SÉCURISÉ</h3>
             </a>
-            <p>Shall open divide a one</p>
+            <p>...</p>
           </div>
         </div>
       </div>

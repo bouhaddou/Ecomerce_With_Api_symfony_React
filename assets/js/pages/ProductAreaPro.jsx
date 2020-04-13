@@ -8,8 +8,8 @@ const ProductAreaPro = () => {
       <div className="row justify-content-center">
         <div className="col-lg-12">
           <div className="main_title">
-            <h2><span>new products</span></h2>
-            <p>Bring called seed first of third give itself now ment</p>
+            <h2><span>NOUVEAUX PRODUITS</span></h2>
+            <p>Les meilleurs types de dattes au Royaume du Maroc</p>
           </div>
         </div>
       </div>
