@@ -66,9 +66,19 @@ class Client
     private $paye;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $postal;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $LivraisonAdress;
 
     public function __construct()
     {
@@ -207,14 +217,38 @@ class Client
         return $this;
     }
 
-    public function getPostal(): ?int
+    public function getPostal()
     {
         return $this->postal;
     }
 
-    public function setPostal(int $postal): self
+    public function setPostal( $postal): self
     {
         $this->postal = $postal;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getLivraisonAdress(): ?string
+    {
+        return $this->LivraisonAdress;
+    }
+
+    public function setLivraisonAdress(?string $LivraisonAdress): self
+    {
+        $this->LivraisonAdress = $LivraisonAdress;
 
         return $this;
     }
