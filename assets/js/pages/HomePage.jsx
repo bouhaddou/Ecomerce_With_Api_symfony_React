@@ -42,10 +42,10 @@ const handleShop =(param) => {
   const data = localStorage.getItem("product")
         if(data === null)
         {
-          const quantite= 1
+          const quantity= 1
           const {id,title, avatar, prix} = param
-          localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantite}]))
-          props.setCartItems({id,title, avatar, prix,quantite})
+          localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantity}]))
+          props.setCartItems({id,title, avatar, prix,quantity})
         }else{
           const {id,title, avatar, prix} = param
           const proLocal = JSON.parse(localStorage.getItem("product"));
@@ -53,13 +53,13 @@ const handleShop =(param) => {
           if(existid.length > 0)
           {
             const index = proLocal.findIndex(x => x.id === existid[0].id )
-            proLocal[index].quantite = proLocal[index].quantite + 1
+            proLocal[index].quantity = proLocal[index].quantity + 1
             localStorage.removeItem("product") 
             localStorage.setItem("product",JSON.stringify(proLocal))
             props.setCartItems(proLocal)
           }else{
-          const quantite= 1
-          proLocal.push({id,title, avatar, prix,quantite})
+          const quantity= 1
+          proLocal.push({id,title, avatar, prix,quantity})
           localStorage.setItem("product",JSON.stringify(proLocal))
           props.setCartItems(proLocal)
           }

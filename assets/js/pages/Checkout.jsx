@@ -44,12 +44,20 @@ const Checkout = () => {
     quantity:"",
     type:""
   }])
+  const [type,setType] = useState("");
+  const [clientId,setClientId] = useState();
   const [produit,setProduit] = useState({})
 
   const getAllproduit = () =>{
+    const idclient = 2
+    const element =[]
     const donnee = JSON.parse(localStorage.getItem("product"));
-    setProduit(donnee)
-
+  
+    for( let i=0 ; i < donnee.length; i++ )
+    { 
+      element.push({produit:donnee[i].id,client:idclient,quantity:donnee[i].quantity,type:type})
+    }  
+     setShop({shop:element})
   }
 
   const handlemss = () =>{ 
@@ -60,41 +68,44 @@ const Checkout = () => {
   }
 
  useEffect(() =>{
- 
-  console.log(shop) 
   getAllproduit()
-  console.log(shop) 
-
   calculTotal()
   $('.bihibihi').hide(); $('.copponhide').hide(); $('.passshide').hide(); $('.adresshide').hide();
  },[])
 
   const handlSubmit = event => {
     event.preventDefault();
-    // const response = axios.post("http://localhost:8000/api/clients",client)
-    // .then(response =>response.data["hydra:member"])
-    const idclient = 2
+    const response = axios.post("http://localhost:8000/api/clients",client)
+    .then(response => setClientId(response.data["id"]))
+
+ 
     const element =[]
-       const donnee = JSON.parse(localStorage.getItem("product"));
-   const typ = shop.type
+    const donnee = JSON.parse(localStorage.getItem("product"));
+  
     for( let i=0 ; i < donnee.length; i++ )
     { 
-      element.push({produit:donnee[i].id,client:idclient,quantity:donnee[i].quantite,type:typ})
+      element.push({produit:donnee[i].id,client:clientId,quantity: parseFloat(donnee[i].quantity),type:type})
     }  
-     
     console.log(element)
-    
-      axios.post("http://localhost:8000/api/shops", {
-            ...shop,   produit : `/api/produits/${shop.produit}`, client : `/api/clients/${shop.client}`, 
-          });
-       
+    // for(let j=0; j<element.length;j++){
+    //   axios.post("http://localhost:8000/api/shops", {
+    //         ...shop,   produit : `/api/produits/${element[j].produit}`, 
+    //         client : `/api/clients/${element[j].client}`,
+    //         Quantity:element[j].quantity, 
+    //         type:element[j].type 
+    //       });
+    // }
 }
 
 
   const handleChange = event =>{
     const {name,value} = event.currentTarget;
     setClient({...client, [name]:value})
-    setShop({...shop, [name]: value})
+    if(name == "type"){
+    setType(value)
+    }
+  
+    
   }
 
 
@@ -103,8 +114,7 @@ const Checkout = () => {
     const montant = localStorage.getItem("total");
     setMontant(parseFloat(montant));
   }
-
-  console.log(shop.produit)
+  console.log(clientId)
 
     return ( <>
     

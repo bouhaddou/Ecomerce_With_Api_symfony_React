@@ -15,15 +15,15 @@ const ProductInfo = (props) => {
     try{
      const  {id,ref,title,content,prix,setAt,observation,avatar,images} = await produitsApi.findbyId(par)
       setProduit({id,ref,title,content,prix,setAt,observation,avatar,images})
-      const quantite = 1
-      setCart({id,title,avatar,prix,quantite})
+      const quantity = 1
+      setCart({id,title,avatar,prix,quantity})
       const donnee = JSON.parse(localStorage.getItem("product"))
       if(donnee !== null)
       {
         const  existid = donnee.filter(pro => pro.id === id)
         if(existid.length > 0)
         {
-          setCart({...cart, quantite: existid[0].quantite})
+          setCart({...cart, quantity: existid[0].quantity})
         }
       }
            
@@ -40,10 +40,10 @@ const handleShop =(param) => {
   const data = localStorage.getItem("product")
   if(data === null)
   {
-    const quantite= 1
+    const quantity= 1
     const {id,title, avatar, prix} = param
-    localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantite}]))
-    props.setCartItems({id,title, avatar, prix,quantite})
+    localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantity}]))
+    props.setCartItems({id,title, avatar, prix,quantity})
   }else{
     const {id,title, avatar, prix} = param
     const proLocal = JSON.parse(localStorage.getItem("product"));
@@ -51,13 +51,13 @@ const handleShop =(param) => {
     if(existid.length > 0)
     {
       const index = proLocal.findIndex(x => x.id === existid[0].id )
-      proLocal[index].quantite = cart.quantite 
+      proLocal[index].quantity = cart.quantity 
       localStorage.removeItem("product") 
       localStorage.setItem("product",JSON.stringify(proLocal))
       props.setCartItems(proLocal)
     }else{
-    const quantite= 1
-    proLocal.push({id,title, avatar, prix,quantite})
+    const quantity= 1
+    proLocal.push({id,title, avatar, prix,quantity})
     localStorage.setItem("product",JSON.stringify(proLocal))
     props.setCartItems(proLocal)
     }
@@ -154,10 +154,10 @@ const handleShop =(param) => {
 
                   <input type="number" 
                   className="form-control" 
-                  id={cart.quantite}  
-                  name="quantite"  
+                  id={cart.quantity}  
+                  name="quantity"  
                   onChange={handleChange} 
-                  value={cart.quantite} />
+                  value={cart.quantity} />
                    
                   </div>
                   </div>

@@ -7,7 +7,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShopRepository")
- * @ApiResource()
+ * @ApiResource(
+ * 
+ * 
+ * )
  */
 class Shop
 {

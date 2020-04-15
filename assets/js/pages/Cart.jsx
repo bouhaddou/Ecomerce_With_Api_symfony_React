@@ -31,7 +31,7 @@ const Cart = ({setCartItems}) => {
     {
     for(let i = 0;i < donnee.length ; i++)
     {
-      somme = somme +  (donnee[i].prix * donnee[i].quantite) 
+      somme = somme +  (donnee[i].prix * donnee[i].quantity) 
      setTotal(somme)
      localStorage.setItem("total",JSON.stringify(somme));
     }
@@ -50,7 +50,7 @@ const Cart = ({setCartItems}) => {
   const donnee = JSON.parse(localStorage.getItem("product"))
   const  existid = donnee.filter(pro => pro.id === parseFloat(name))
   const index = donnee.findIndex(x => x.id === existid[0].id )
-  donnee[index].quantite = value
+  donnee[index].quantity = value
   localStorage.removeItem("product") 
   localStorage.setItem("product",JSON.stringify(donnee))
   setCartItems(donnee)
@@ -132,11 +132,11 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                   </td>
                   <td>
                     <div className="prix">
-                    <input type="number" className="form-control" id={produit.id}  name={produit.id}  onChange={handleChange} value={produit.quantite} />
+                    <input type="number" className="form-control" id={produit.id}  name={produit.id}  onChange={handleChange} value={produit.quantity} />
                     </div>
                   </td>
                   <td>
-                    <h5>{(produit.prix * produit.quantite).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') } Dirhams</h5>
+                    <h5>{(produit.prix * produit.quantity).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') } Dirhams</h5>
                   </td>
                   <td className="text-center">
                     <button onClick={handleRemoveItem} id={produit.id} className="btn btn-danger">X</button>

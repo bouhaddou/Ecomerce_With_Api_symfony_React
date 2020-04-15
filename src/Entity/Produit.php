@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  normalizationContext={
  *      "groups"={"produit_read"}
  * }
+ *
  * )
  */
 class Produit
