@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 
 const BlogPage = () => {
+  const [blog, setBlog] = useState({})
+
+  const fetchBlog = () => {
+     const response = axios.get("http://localhost:8000/api/posts")
+     setBlog(response.data["hydra:member"])
+     console.log(response.data["hydra:member"])
+  }
+
+  useEffect(() =>{
+    fetchBlog()
+  },[])
+  console.log(blog)
     return ( <>
     
     <section className="banner_area">
@@ -27,9 +41,11 @@ const BlogPage = () => {
           <div className="row">
               <div className="col-lg-8 mb-5 mb-lg-0">
                   <div className="blog_left_sidebar">
-                      <article className="blog_item">
+               
+                  {blog.map(blo =>
+                      <article className="blog_item" key={blo.id}>
                         <div className="blog_item_img">
-                          <img className="card-img rounded-0" src="img/blog/main-blog/m-blog-1.jpg" alt="" />
+                          <img className="card-img rounded-0" src={blo.avatar} alt="" />
                           <a href="#" className="blog_item_date">
                             <h3>15</h3>
                             <p>Jan</p>
@@ -38,58 +54,16 @@ const BlogPage = () => {
                         
                         <div className="blog_details">
                             <a className="d-inline-block" href="single-blog.html">
-                                <h2>Google inks pact for new 35-storey office</h2>
+                                <h2>{blo.title}</h2>
                             </a>
-                            <p>That dominion stars lights dominion divide years for fourth have don't stars is that he earth it first without heaven in place seed it second morning saying.</p>
+                            <p>{blo.content}</p>
                             <ul className="blog-info-link">
                               <li><a href="#"><i className="ti-user"></i> Travel, Lifestyle</a></li>
                               <li><a href="#"><i className="ti-comments"></i> 03 Comments</a></li>
                             </ul>
                         </div>
                       </article>
-                      
-                      <article className="blog_item">
-                        <div className="blog_item_img">
-                          <img className="card-img rounded-0" src="img/blog/main-blog/m-blog-2.jpg" alt="" />
-                          <a href="#" className="blog_item_date">
-                            <h3>15</h3>
-                            <p>Jan</p>
-                          </a>
-                        </div>
-                        
-                        <div className="blog_details">
-                            <a className="d-inline-block" href="single-blog.html">
-                                <h2>Google inks pact for new 35-storey office</h2>
-                            </a>
-                            <p>That dominion stars lights dominion divide years for fourth have don't stars is that he earth it first without heaven in place seed it second morning saying.</p>
-                            <ul className="blog-info-link">
-                              <li><a href="#"><i className="ti-user"></i> Travel, Lifestyle</a></li>
-                              <li><a href="#"><i className="ti-comments"></i> 03 Comments</a></li>
-                            </ul>
-                        </div>
-                      </article>
-
-                      <article className="blog_item">
-                        <div className="blog_item_img">
-                          <img className="card-img rounded-0" src="img/blog/main-blog/m-blog-3.jpg" alt="" />
-                          <a href="#" className="blog_item_date">
-                            <h3>15</h3>
-                            <p>Jan</p>
-                          </a>
-                        </div>
-                        
-                        <div className="blog_details">
-                            <a className="d-inline-block" href="single-blog.html">
-                                <h2>Google inks pact for new 35-storey office</h2>
-                            </a>
-                            <p>That dominion stars lights dominion divide years for fourth have don't stars is that he earth it first without heaven in place seed it second morning saying.</p>
-                            <ul className="blog-info-link">
-                              <li><a href="#"><i className="ti-user"></i> Travel, Lifestyle</a></li>
-                              <li><a href="#"><i className="ti-comments"></i> 03 Comments</a></li>
-                            </ul>
-                        </div>
-                      </article>
-
+                    )}
                       <article className="blog_item">
                         <div className="blog_item_img">
                           <img className="card-img rounded-0" src="img/blog/main-blog/m-blog-4.jpg" alt="" />

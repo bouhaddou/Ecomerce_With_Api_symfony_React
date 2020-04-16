@@ -3,9 +3,10 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Categorie;
+use App\Entity\Post;
 use App\Entity\Image;
 use App\Entity\Produit;
+use App\Entity\Categorie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -50,7 +51,17 @@ class AppFixtures extends Fixture
              } 
             
          }
-
+         for( $g=1; $g<=10; $g++)
+         {
+            $post = new Post();
+            $content ='<p>' . join('</p><p>',$faker->paragraphs(3)) .'</p>';
+            $avatar= "http://lorempixel.com/640/480/";
+            $post->setTitle($faker->slug)
+                    ->setContent($content)
+                    ->setAvatar($avatar);
+           
+            $manager->persist($post);
+         }
          
 
         $manager->flush();
