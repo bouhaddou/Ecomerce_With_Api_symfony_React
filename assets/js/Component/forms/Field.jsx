@@ -11,7 +11,7 @@ const Field = ({name,onChange,type ="text",id,error="",style,placeholder="",plac
             name={name}
             id={id}
             value={value}
-            className="form-control "
+            className={"form-control " + (error && " is-invalid" )}
         />
         
         {error &&<p className="invalid-feedback">{error}</p>}

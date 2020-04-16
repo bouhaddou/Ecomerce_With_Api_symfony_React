@@ -5,7 +5,7 @@ import BlogPage from './BlogPage';
 import Slider from '../Component/Slider';
 import produitsApi from '../services/produitsApi';
 import { Link } from 'react-router-dom';
-
+import { toast } from 'react-toastify';
 
 const HomePage = (props) => {
     const [produits,setProduits] = useState({});
@@ -19,11 +19,11 @@ const HomePage = (props) => {
   const fetchProduits = async () =>{
     try{
      const data = await  produitsApi.findAll();
-         setProduits(data);
-       setFilterProduit(data.slice(0,6))
-       const nombre = Math.floor(Math.random() * (data.length - 1 + 1)) + 1;
-       setBestProduct(data[nombre])
-
+        setProduits(data);
+        setFilterProduit(data.slice(0,6))
+        const nombre = Math.floor(Math.random() * (data.length - 1 + 1)) + 1;
+        setBestProduct(data[nombre])
+        this.props.setCartNav({})
    }catch(error){
        console.log(error.response)
    }
@@ -45,7 +45,7 @@ const handleShop =(param) => {
           const quantity= 1
           const {id,title, avatar, prix} = param
           localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantity}]))
-          props.setCartItems({id,title, avatar, prix,quantity})
+          props.setCartNav({id,title, avatar, prix,quantity})
         }else{
           const {id,title, avatar, prix} = param
           const proLocal = JSON.parse(localStorage.getItem("product"));
@@ -56,15 +56,15 @@ const handleShop =(param) => {
             proLocal[index].quantity = proLocal[index].quantity + 1
             localStorage.removeItem("product") 
             localStorage.setItem("product",JSON.stringify(proLocal))
-            props.setCartItems(proLocal)
           }else{
           const quantity= 1
           proLocal.push({id,title, avatar, prix,quantity})
           localStorage.setItem("product",JSON.stringify(proLocal))
-          props.setCartItems(proLocal)
-          }
-    }
+          } 
+          props.setCartNav(proLocal)
 
+    }
+    toast.success("le produit est ajouter au panier avec succée")
 }
     if(!produits){
     return <div>loading</div>}else{ 

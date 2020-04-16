@@ -4,12 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShopRepository")
  * @ApiResource(
- * 
- * 
  * )
  */
 class Shop
@@ -35,13 +34,28 @@ class Shop
 
     /**
      * @ORM\Column(type="float")
+     * 
      */
     private $Quantity;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="merci de coucher le type de Régelement")
      */
     private $type;
+
+
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Assert\NotBlank(message="les conditions génerale ne sont pas accepter")
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $delivery;
 
     public function getId(): ?int
     {
@@ -92,6 +106,32 @@ class Shop
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+
+
+    public function getStatus(): ?bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDelivery(): ?string
+    {
+        return $this->delivery;
+    }
+
+    public function setDelivery(?string $delivery): self
+    {
+        $this->delivery = $delivery;
 
         return $this;
     }

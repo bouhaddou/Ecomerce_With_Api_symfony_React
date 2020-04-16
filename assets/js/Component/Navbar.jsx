@@ -2,21 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 
-const Navbar = ({cartItems}) => {
-  const fetchProduit= async () =>{
-    try{
-      const donnee = JSON.parse(localStorage.getItem("product"))
-      if(donnee)
-      {
-        cartItems(donnee);
-      }
-    }catch(error){
-        console.log(error.response);
-    }
-}
-useEffect(() =>{
-  fetchProduit();
-},[])
+const Navbar = ({cartNav,setCartNav}) => {
+
  return ( 
     <>
   <header className="header_area">
@@ -82,9 +69,6 @@ useEffect(() =>{
                       <li className="nav-item">
                         <Link className="nav-link" to="/cart">Cart </Link>
                       </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/checkout">Paiement </Link>
-                      </li>
                     </ul>
                   </li>
                   <li className="nav-item submenu dropdown">
@@ -120,33 +104,30 @@ useEffect(() =>{
                 <ul className="nav navbar-nav navbar-right right_nav pull-right">
                   <li className="nav-item submenu dropdown">
                     <a  className="nav-link dropdown-toggle icons text-danger" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false"> Panier 
-                      <span className=""> {cartItems && cartItems.length}</span> Produits 
+                      aria-expanded="false"> 
+                      
+                      Panier 
+                      <span className=""> {cartNav && cartNav.length} </span> Produits 
                       <i className="ti-shopping-cart fa-3x text-danger"></i></a>
                    
-                    <ul className="dropdown-menu ">
+                    <ul className="dropdown-menu "> <Link to="/cart">
                       <table className="table table-hover">
                         <thead>
-                          <tr>
-                            <th></th>
-                            <th>id</th>
-                            <th>Image</th>
-                            <th>prix</th>
-                          </tr>
+                          
                         </thead>
                         <tbody>
-                            { cartItems && cartItems.map(produit =>  
+                            {cartNav && cartNav.map(produit =>  
                               <tr key={produit.id}>
-                                  <td> <Link to="/cart"><i className="fas fa-eye"></i></Link></td>
-                                  <td>{produit.id}</td>
+                                  <td>{produit.title.slice(0,7)}</td>
                                   <td>
-                                    <img className="w-100 h-15" src={produit.avatar} />
+                                    <img className="w-100 h-15 rounded" src={produit.avatar} />
                                   </td>
-                                  <td>{produit.prix}</td>
+                                  <td>{produit.prix.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} </td>
                               </tr> 
+                            
                              )}
                         </tbody>
-                     </table>
+                     </table>  </Link>
                     </ul>
                   </li>
                 </ul>

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
@@ -22,21 +23,28 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Merci de Entreé Votre Prénom ")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Merci de Entreé Votre Nom ")
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Merci de Entreé Votre email ")
+     * @Assert\Email(
+     *     message = "L'email '{{ value }}' n'est pas un email valide."
+     * )
      */
     private $email;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="Merci de Entreé Votre Adresse  ")
      */
     private $adress;
 
@@ -57,6 +65,7 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Merci de Entreé Votre numéro de téléphone ")
      */
     private $phone;
 
@@ -72,14 +81,11 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Merci de Entreé Votre Ville ")
      */
     private $city;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $LivraisonAdress;
-
+ 
     public function __construct()
     {
         $this->shops = new ArrayCollection();
@@ -241,15 +247,5 @@ class Client
         return $this;
     }
 
-    public function getLivraisonAdress(): ?string
-    {
-        return $this->LivraisonAdress;
-    }
-
-    public function setLivraisonAdress(?string $LivraisonAdress): self
-    {
-        $this->LivraisonAdress = $LivraisonAdress;
-
-        return $this;
-    }
+    
 }

@@ -3,8 +3,8 @@ import React from 'react';
 
 const Slider = () => {
     return ( <>
-    
-    <div id="carouselExampleCaptions" className="carousel slide" data-ride="carousel">
+<div className="colorback">
+<div id="carouselExampleCaptions" className="carousel slide" data-ride="carousel">
   <ol className="carousel-indicators">
     <li data-target="#carouselExampleCaptions" data-slide-to="0" className="active"></li>
     <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
@@ -46,7 +46,7 @@ const Slider = () => {
   <section className="feature-area section_gap_bottom_custom">
     <div className="container">
       <div className="row">
-        <div className="col-lg-3 col-md-6">
+        <div className="col-lg-4 col-md-6">
           <div className="single-feature">
             <a href="#" className="title">
               <i className="flaticon-money"></i>
@@ -56,7 +56,7 @@ const Slider = () => {
           </div>
         </div>
 
-        <div className="col-lg-3 col-md-6">
+        <div className="col-lg-4 col-md-6">
           <div className="single-feature">
             <a href="#" className="title">
               <i className="flaticon-truck"></i>
@@ -66,7 +66,7 @@ const Slider = () => {
           </div>
         </div>
 
-        <div className="col-lg-3 col-md-6">
+        <div className="col-lg-4 col-md-6">
           <div className="single-feature">
             <a href="#" className="title">
               <i className="flaticon-support"></i>
@@ -76,19 +76,10 @@ const Slider = () => {
           </div>
         </div>
 
-        <div className="col-lg-3 col-md-6">
-          <div className="single-feature">
-            <a href="#" className="title">
-              <i className="flaticon-blockchain"></i>
-              <h3>PAIEMENT SÉCURISÉ</h3>
-            </a>
-            <p>...</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>
-    
+  </div> 
     </> );
 }
  

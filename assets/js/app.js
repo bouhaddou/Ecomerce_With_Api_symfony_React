@@ -24,15 +24,17 @@ import Cart from './pages/cart';
 import Contact from './pages/contact';
 import BlogPage from './pages/BlogPage';
 import Produits from './pages/produits';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const App = () => {
-    const [cartItems, setCartItems] = useState([])
+    const [cartNav, setCartNav] = useState([])
 
     const fetchProduits =  () =>{
-        const items = JSON.parse(localStorage.getItem("produits")) 
-        setCartItems(items)
+         
+        const items = JSON.parse(localStorage.getItem("product")) 
+        setCartNav(items)
     }
     
     useEffect(() => {
@@ -44,25 +46,26 @@ const App = () => {
 
     return ( <>
         <HashRouter>
-                <Navbar cartItems={cartItems} />
+                <Navbar cartNav={cartNav} setCartNav={setCartNav} />
                 <Switch>
                 <Route  path="/produits" render={props=>{
-                   return <Produits setCartItems={setCartItems} {...props} /> 
+                   return <Produits setCartNav={setCartNav} {...props} /> 
                 }} />
                 <Route path="/ProductInfo/:id" render={props=>{
-                   return <ProductInfo setCartItems={setCartItems} {...props} /> 
+                   return <ProductInfo setCartNav={setCartNav} {...props} /> 
                 }} />
                 <Route path="/cart" render={props=>{
-                   return <Cart setCartItems={setCartItems} {...props} /> 
+                   return <Cart setCartNav={setCartNav} {...props} /> 
                 }} />
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/contact" component={Contact} />
                 <Route path="/blogPage" component={BlogPage} />
                 <Route path="/" render={props=>{
-                   return <HomePage setCartItems={setCartItems} {...props} /> 
+                   return <HomePage setCartNav={setCartNav} {...props} /> 
                 }} />
                 </Switch>
             <Footer />
+            <ToastContainer position={toast.POSITION.BOTTOM_LEFT}/>
         </HashRouter>
     </> );
 }

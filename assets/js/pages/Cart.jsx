@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Field from '../Component/forms/Field';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
-
-const Cart = ({setCartItems}) => {
+const Cart = ({setCartNav}) => {
   const [cart, setCart] = useState({});
   const [total, setTotal] = useState(0);
 
@@ -53,7 +54,7 @@ const Cart = ({setCartItems}) => {
   donnee[index].quantity = value
   localStorage.removeItem("product") 
   localStorage.setItem("product",JSON.stringify(donnee))
-  setCartItems(donnee)
+  setCartNav(donnee)
   setCart(donnee)
   totalfun()
 }
@@ -65,13 +66,16 @@ const handleRemoveItem = (event) =>{
   const aaa =  del.filter(item => item.id !== parseFloat(name))
   localStorage.removeItem("product")
   localStorage.setItem("product",JSON.stringify(aaa))
+  toast.error("bien supprimer le produit dans panier")
   const data2 = localStorage.getItem("product");
   setCart(JSON.parse(data2));
-  setCartItems(JSON.parse(data2))
+  setCartNav(JSON.parse(data2))
   totalfun()
   if(cart.length == 0){
     setTotal(0)
   }
+
+
  
 }
 
@@ -141,11 +145,21 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                   <td className="text-center">
                     <button onClick={handleRemoveItem} id={produit.id} className="btn btn-danger">X</button>
                   </td>
+                 
                 </tr>
               )}
+              <tr>
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                <td></td> 
+              </tr>
                <tr>
-                  <td></td>  
-                  <td></td>
+                   
+               <td></td><td></td>
                   <td></td>
                   <td>
                   <div className="checkout_btn_inner">
@@ -178,6 +192,14 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                     <h5>{total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dirhams</h5>
                   </td>
                 </tr>
+                <tr>
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                
+              </tr>
                 <tr className="out_button_area">
                   <td></td>
                   <td></td>
@@ -186,7 +208,7 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                   <td></td>
                   <td>
                     <div className="checkout_btn_inner">
-                      <a className="main_btn" href="#">Proceed to checkout</a>
+                    {/* <Link  className={"main_btn " + (cart == "" && " disabled-link ")} to="/checkout">Passer à la caisse</Link> */}
                     </div>
                   </td>
                 </tr>

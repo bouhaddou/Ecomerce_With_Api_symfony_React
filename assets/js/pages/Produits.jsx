@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import produitsApi from '../services/produitsApi';
 import { Link } from 'react-router-dom';
-import ProductAreaPro from './ProductAreaPro';
+import { toast } from 'react-toastify';
 
 const Produits = (props) => {
 
@@ -22,7 +22,7 @@ const Produits = (props) => {
          setFilterProduit(data.slice(0,6))
          const nombre = Math.floor(Math.random() * (data.length - 1 + 1)) + 1;
          setBestProduct(data[nombre])
-
+         this.props.setCartNav({})
    }catch(error){
        console.log(error.response)
    }
@@ -44,7 +44,7 @@ const handleShop =(param) => {
           const quantity= 1
           const {id,title, avatar, prix} = param
           localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantity}]))
-          props.setCartItems({id,title, avatar, prix,quantity})
+          props.setCartNav({id,title, avatar, prix,quantity})
         }else{
           const {id,title, avatar, prix} = param
           const proLocal = JSON.parse(localStorage.getItem("product"));
@@ -55,20 +55,37 @@ const handleShop =(param) => {
             proLocal[index].quantity = proLocal[index].quantity + 1
             localStorage.removeItem("product") 
             localStorage.setItem("product",JSON.stringify(proLocal))
-            props.setCartItems(proLocal)
           }else{
           const quantity= 1
           proLocal.push({id,title, avatar, prix,quantity})
           localStorage.setItem("product",JSON.stringify(proLocal))
-          props.setCartItems(proLocal)
           }
+          props.setCartNav(proLocal)
         }
+        toast.success("le produit est ajouter au panier avec succée")
 }
 
 
    if(!produits){
       return <div>loading</div>}else{ return ( <>
-  
+            <section className="banner_area">
+      <div className="banner_inner d-flex align-items-center">
+        <div className="container">
+          <div
+            className="banner_content d-md-flex justify-content-between align-items-center"
+          >
+            <div className="mb-3 mb-md-0">
+              <h2>Produits</h2>
+              <p>Very us move be blessed multiply night</p>
+            </div>
+            <div className="page_link">
+              <a href="index.html">Home</a>
+              <a href="cart.html">Cart</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
         <section className="cat_product_area section_gap">
             <div className="container">
                 <div className="row flex-row-reverse">
@@ -94,7 +111,6 @@ const handleShop =(param) => {
                                       <Link  to={"/ProductInfo/" + produit.id } >
                                         <i className="ti-eye"></i>
                                       </Link>
-                                      <a href="#"> <i className="ti-heart"></i></a>
                                       <a 
                                       onClick={() => handleShop(produit)}
                                       > <i className="ti-shopping-cart"></i> </a>

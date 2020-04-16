@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import $ from "jquery"
 import Field from '../Component/forms/Field';
 import axios from 'axios';
-
+import RadioFilds from '../Component/forms/RadioFilds';
+import { toast } from 'react-toastify';
 const Checkout = () => {
 
   const [montant , setMontant] = useState(0);
@@ -15,8 +16,7 @@ const Checkout = () => {
     paye : "",
     city : "",
     postal : "",
-    password:"",
-    LivraisonAdress:""
+    password:""
   })
   const [error,setError] = useState({
     firstName : "",
@@ -28,7 +28,9 @@ const Checkout = () => {
     city : "",
     postal : "",
     password:"",
-    LivraisonAdress:""
+    type:"",
+    status:"",
+    delivery:""
   })
   const [user,setUser] = useState({
     email : "",
@@ -42,9 +44,12 @@ const Checkout = () => {
     produit:"",
     client:"",
     quantity:"",
-    type:""
+    type:"",
+    status:false,
+    delivery:""
   }])
   const [type,setType] = useState("");
+  const [status,setStatus] = useState(false);
   const [clientId,setClientId] = useState();
   const [produit,setProduit] = useState({})
 
@@ -52,19 +57,19 @@ const Checkout = () => {
     const idclient = 2
     const element =[]
     const donnee = JSON.parse(localStorage.getItem("product"));
-  
+  if(donnee){
     for( let i=0 ; i < donnee.length; i++ )
     { 
       element.push({produit:donnee[i].id,client:idclient,quantity:donnee[i].quantity,type:type})
     }  
      setShop({shop:element})
   }
-
+  }
   const handlemss = () =>{ 
-    $('.bihi').on('click', function(){  $('.bihibihi').slideToggle();});
-    $('.coponclick').on('click', function(){ $('.copponhide').slideToggle();});
-    $('.passshow').on('click', function(){  $('.passshide').slideToggle();});
-    $('.adressshow').on('click', function(){$('.adresshide').slideToggle();});
+    $('.bihi').on('click', function(){  $('.bihibihi').toggle();});
+    $('.coponclick').on('click', function(){ $('.copponhide').toggle();});
+    $('.passshow').on('click', function(){  $('.passshide').toggle();});
+    $('.adressshow').on('click', function(){$('.adresshide').toggle();});
   }
 
  useEffect(() =>{
@@ -73,48 +78,66 @@ const Checkout = () => {
   $('.bihibihi').hide(); $('.copponhide').hide(); $('.passshide').hide(); $('.adresshide').hide();
  },[])
 
-  const handlSubmit = event => {
+  const handlSubmit =async event => {
     event.preventDefault();
-    const response = axios.post("http://localhost:8000/api/clients",client)
-    .then(response => setClientId(response.data["id"]))
-
- 
+    try{
+    const response = await axios.post("http://localhost:8000/api/clients",client)
     const element =[]
     const donnee = JSON.parse(localStorage.getItem("product"));
-  
+ 
+  // try{
     for( let i=0 ; i < donnee.length; i++ )
     { 
-      element.push({produit:donnee[i].id,client:clientId,quantity: parseFloat(donnee[i].quantity),type:type})
+      element.push({produit:donnee[i].id,client:response.data.id,quantity: parseFloat(donnee[i].quantity),type:type,status:status,delivery:shop.delivery})
     }  
-    console.log(element)
-    // for(let j=0; j<element.length;j++){
-    //   axios.post("http://localhost:8000/api/shops", {
-    //         ...shop,   produit : `/api/produits/${element[j].produit}`, 
-    //         client : `/api/clients/${element[j].client}`,
-    //         Quantity:element[j].quantity, 
-    //         type:element[j].type 
-    //       });
-    // }
+    
+    for(let j=0; j<element.length;j++){
+       await  axios.post("http://localhost:8000/api/shops", {
+            ...shop,   produit : `/api/produits/${element[j].produit}`, 
+            client : `/api/clients/${element[j].client}`,
+            Quantity:element[j].quantity, 
+            type:element[j].type,
+            status:element[j].status, 
+            delivery:element[j].delivery
+          });
+    }
+    localStorage.removeItem("product")
+    localStorage.removeItem("total")
+    toast.success("votre commande a été bien envoyer ")
+  }catch({response}){
+    const { violations } = response.data;
+    if(violations){
+        const apiErrors = {};
+        violations.forEach(({propertyPath,message})  => {
+            apiErrors[propertyPath] = message;
+        });
+
+       setError(apiErrors);
+       toast.error(" Merci de vérifiee tous les champs avant de passer la commande  ")
+    }
 }
+
+  }
 
 
   const handleChange = event =>{
     const {name,value} = event.currentTarget;
     setClient({...client, [name]:value})
+    const checked =  event.currentTarget.checked;
     if(name == "type"){
     setType(value)
     }
-  
+    if(name == "status"){
+      setStatus(checked)
+    }
     
   }
-
 
 
   const calculTotal = () =>{
     const montant = localStorage.getItem("total");
     setMontant(parseFloat(montant));
   }
-  console.log(clientId)
 
     return ( <>
     
@@ -139,7 +162,7 @@ const Checkout = () => {
     <section className="checkout_area section_gap">
       <div className="container">
         <div className="returning_customer">
-          <div className="check_title">
+          <div className="check_title mb-3">
             <span className="h5">Déja Inscrit : </span>
              <button 
                
@@ -267,8 +290,9 @@ const Checkout = () => {
                   </div>
                 </div>
                 <Field type="password" placeholder="Mot de passe " style="col-md-12 form-group passshide p_star" 
-                id={client.password} 
+                id={client.password}
                 name="password"
+                value={client.password}
                 id="password"
                 error={error.password}
                 onChange={handleChange}
@@ -276,20 +300,18 @@ const Checkout = () => {
                 <div className="col-md-12 form-group ">
                   <div className="creat_account">
                     <h3>Les détails d'expédition</h3>
-                    <button type="button" className="adressshow" onClick={handlemss} >Livrer à une adresse différente?</button>
+                    <p >Livrer à une adresse différente?</p>
                   </div>
-                  <div className="adresshide">
+                  <div >
                     <textarea
                       className="form-control"
                       name="message"
                       id="message"
-                      rows="1"
+                      rows="5"
                       placeholder="Notes d'ordre"
                     ></textarea>
                   </div>
                 </div>
-                <input type="submit" value="envoyer" />
-            
             </div>
             <div className="col-lg-4">
               <div className="order_box">
@@ -323,27 +345,41 @@ const Checkout = () => {
                   </li>
                 </ul>
                 <div className="">
-                  <div className="form-group">
-                    <input className="" type="radio" id="option1" value="CHEQUE" name="type"   onChange={handleChange} />
-                    <label htmlFor="option1">Le paiement par chèque </label>
-                  </div>
+                  
+                  <RadioFilds type="radio" label="le Régelement par cheque" style="creat_account"  
+                  id="option1" value="CHEQUE" 
+                  name="type"
+                  checked="CHEQUE"
+                  error={error.type}
+                  onChange={handleChange}
+                  />
+                  
                   <p>
                   Effectuez un virement vers l'un des noms mentionnés puis envoyez-nous 
                   le numéro de virement pour confirmer 
                   </p>
                 </div>
                 <div className=" ">
-                  <div className="form-group">
-                  <input className="" type="radio" id="option12" value="RECEPTION" name="type"   onChange={handleChange} />
-                    <label htmlFor="option12">Paiement à réception </label>
-                  </div>
+                <RadioFilds type="radio" label="le Régelement  a la réception" style="creat_account"  
+                  id="option12" 
+                  value="RECEPTION" 
+                  name="type"
+                  checked="RECEPTION"
+                  error={error.type}
+                  onChange={handleChange}
+                  />
                   <p>
                     Payez à la livraison directement.                 
                   </p>
                 </div>
                 <div className="creat_account">
-                  <input type="checkbox" id="f-option4" name="selector" />
-                  <label htmlFor="f-option4">J'ai lu et j'accepte les </label>
+                <RadioFilds type="checkbox"  style="" label="J'ai lu et j'accepte les"  
+                  name="status"
+                  id="status"
+                  checked={shop.status}
+                  error={error.status}
+                  onChange={handleChange}
+                  />
                   <a href="#"> conditions &  générales *</a>
                 </div>
                 <button type="submit" className="main_btn" >Confirmer la commande</button>
