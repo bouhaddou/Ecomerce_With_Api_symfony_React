@@ -103,22 +103,23 @@ if(!cart){return <div>loading</div>}else{ return ( <>
       <div className="container">
         <div className="cart_inner">
           <div className="table-responsive">
+            <h2>Panier ({cart.length} article)</h2>
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">id</th>
-                  <th scope="col">Produit</th>
-                  <th className="text-center" scope="col">Titre</th>
-                  <th scope="col">Prix</th>
-                  <th scope="col">Quantité</th>
-                  <th scope="col">Montant Total</th>
+                  
+                  <th scope="col">ARTICLE</th>
+                  <th className="text-center" scope="col"></th>
+                  <th scope="col">PRIX UNITAIRE</th>
+                  <th scope="col">QUANTITÉ</th>
+                  <th scope="col">SOUS-TOTAL</th>
                   <th className="text-center" scope="col">Supprimer</th>
                 </tr>
               </thead>
               <tbody>
               {cart.length >0 && cart.map(produit =>
                 <tr key={produit.id}>
-                  <td>{produit.id}</td>
+                  
                   <td>
                       <div className=" imag-pro">
                         <img className=""
@@ -132,7 +133,7 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                           <p>{produit.title}</p> 
                       </div></td>
                   <td>
-                    <h5 className="prix">{produit.prix.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dirhams </h5> 
+                    <h4 className="prix">{produit.prix.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dhs </h4> 
                   </td>
                   <td>
                     <div className="prix">
@@ -140,12 +141,11 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                     </div>
                   </td>
                   <td>
-                    <h5>{(produit.prix * produit.quantity).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') } Dirhams</h5>
+                    <h4 className="text-danger ">{(produit.prix * produit.quantity).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') } Dhs</h4>
                   </td>
                   <td className="text-center">
-                    <button onClick={handleRemoveItem} id={produit.id} className="btn btn-danger">X</button>
+                  <a onClick={handleRemoveItem} id={produit.id}  className="text-danger"><i className="fas fa-trash-alt "></i> SUPPRIMER</a>
                   </td>
-                 
                 </tr>
               )}
               <tr>
@@ -167,7 +167,7 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                     </div>
                   </td>
                   <td>
-                      <h5>{total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dirhams </h5>
+                      <h4>{total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dhs </h4>
                   </td>
                 </tr>
                 <tr>
@@ -189,7 +189,7 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                     <h5>Montant Total</h5>
                   </td>
                   <td>
-                    <h5>{total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dirhams</h5>
+                    <h3 className="text-danger ">{total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dhs</h3>
                   </td>
                 </tr>
                 <tr>
@@ -205,10 +205,14 @@ if(!cart){return <div>loading</div>}else{ return ( <>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <td>
                     <div className="checkout_btn_inner">
-                    {/* <Link  className={"main_btn " + (cart == "" && " disabled-link ")} to="/checkout">Passer à la caisse</Link> */}
+                    <Link  className={" btn btn-info  " + (cart == "" && "  ")} to="/produits">POURSUIVRE VOS ACHATS</Link>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="checkout_btn_inner">
+                    <Link  className={"main_btn  " + (cart == "" && "  ")} to="/checkout">Passer à la caisse</Link>
                     </div>
                   </td>
                 </tr>

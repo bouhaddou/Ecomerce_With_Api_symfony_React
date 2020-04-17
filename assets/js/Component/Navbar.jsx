@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import '../../css/bootstrap.css'
+import '../../css/linericon/style.css'
+import '../../css/font-awesome.min.css'
+import '../../css/themify-icons.css'
+import '../../css/flaticon.css'
+import '../../css/owl-carousel/owl.carousel.min.css'
+import '../../css/lightbox/simpleLightbox.css'
+import '../../css/nice-select/css/nice-select.css'
+import '../../css/animate-css/animate.css'
+import '../../css/jquery-ui/jquery-ui.css'
+import '../../css/app.css';
+import '../../css/style.css'
+import '../../css/responsive.css';
 
 const Navbar = ({cartNav,setCartNav}) => {
 
@@ -142,5 +154,5 @@ const Navbar = ({cartNav,setCartNav}) => {
     </>
  );
 }
- 
+
 export default Navbar;

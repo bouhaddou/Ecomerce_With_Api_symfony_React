@@ -1,9 +1,57 @@
-import React from 'react';
-
+import React, { useState } from 'react';
+import Field from '../Component/forms/Field';
+import axios from 'axios';
+import contactApi from '../services/contactApi';
+import { toast } from 'react-toastify';
 
 const Contact = () => {
-    return ( <>
+
+  const [contact, setContact] = useState({
+    name:"",
+    phone:"",
+    email:"",
+    message:"",
+    objet:""
+  })
+  const [error, setError] = useState({
+    name:"",
+    phone:"",
+    email:"",
+    message:"",
+    objet:""
+  })
+
+
+
+  const handleSubmit =async event =>{
+    event.preventDefault();
+    try{
+      const response = await contactApi.PostItem(contact)
+      toast.success("votre message a été envoyer avec succée  ")
+    }catch({response}){
+      const { violations } = response.data;
+      if(violations){
+          const apiErrors = {};
+          violations.forEach(({propertyPath,message})  => {
+              apiErrors[propertyPath] = message;
+          });
+  
+         setError(apiErrors);
+         toast.error(" Merci de vérifiee tous les champs avant de envoyer votre message  ")
+      }
+  }
+
+  }
+
+
+  const handleChange = event =>{
+    const {name,value} = event.currentTarget;
+    setContact({...contact, [name]:value})
     
+    
+  }
+
+    return ( <>
     <section className="banner_area">
       <div className="banner_inner d-flex align-items-center">
         <div className="container">
@@ -25,66 +73,57 @@ const Contact = () => {
     <div className="container">
       <div className="d-none d-sm-block mb-5 pb-4">
         <div id="map" ></div>
-        {/* <script>
-          function initMap() {
-            var uluru = {lat: -25.363, lng: 131.044};
-            var grayStyles = [
-              {
-                featureType: "all",
-                stylers: [
-                  { saturation: -90 },
-                  { lightness: 50 }
-                ]
-              },
-              {elementType: 'labels.text.fill', stylers: [{color: '#A3A3A3'}]}
-            ];
-            var map = new google.maps.Map(document.getElementById('map'), {
-              center: {lat: -31.197, lng: 150.744},
-              zoom: 9,
-              styles: grayStyles,
-              scrollwheel:  false
-            });
-          }
-          
-        </script> */}
-        {/* <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpfS1oRGreGSBU5HHjMmQ3o5NLw7VdJ6I&callback=initMap"></script> */}
       </div>
       <div className="row">
         <div className="col-12">
-          <h2 className="contact-title">Entrer en contact</h2>
+          <h2 className="contact-title">contactez nous</h2>
         </div>
         <div className="col-lg-8 mb-4 mb-lg-0">
-          <form className="form-contact contact_form" action="contact_process.php" method="post" id="contactForm" >
+          <form className="form-contact contact_form" onSubmit={handleSubmit}>
             <div className="row">
-              <div className="col-12">
+              
+              <Field type="text" placeholder="tapez votre Nom Complet !!" style="col-md-6 form-group "
+                value={contact.name} 
+                name="name" 
+                id="name" 
+                error={error.name} 
+                onChange={handleChange}
+                />
+                <Field type="text" placeholder="tapez l'objet de message " style="col-md-6 form-group "
+               value={contact.objet} 
+               name="objet" 
+               id="objet" 
+               error={error.objet} 
+               onChange={handleChange}
+                />
+                <Field type="email" placeholder="tapez votre Email !!" style="col-md-6 form-group "
+                value={contact.email} 
+                name="email" 
+                id="email" 
+                error={error.email} 
+                onChange={handleChange}
+                />
+              
+                <Field type="text" placeholder="tapez votre Numero de téléphone" style="col-md-6 form-group "
+                 value={contact.phone} 
+                 name="phone" 
+                 id="phone" 
+                 error={error.phone} 
+                 onChange={handleChange}
+                />
+                <div className="col-md-12">
                 <div className="form-group">
-                    <textarea className="form-control w-100" name="message" id="message" cols="30" rows="9" placeholder="Tapez votre Message"></textarea>
+                    <textarea value={contact.message}    onChange={handleChange}  className={"form-control " + (error.message && " is-invalid" )} name="message" id="message" cols="30" rows="9" placeholder="Tapez votre Message"></textarea>
+                    {error.message &&<p className="invalid-feedback">{error.message}</p>}
                 </div>
               </div>
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <input className="form-control" name="name" id="name" type="text" placeholder="Enter votre Nom"/>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <input className="form-control" name="email" id="email" type="email" placeholder="Enter votre addresse  email "/>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="form-group">
-                  <input className="form-control" name="subject" id="subject" type="text" placeholder="tapez un Objet"/>
-                </div>
-              </div>
-            </div>
+                  
             <div className="form-group mt-lg-3">
               <button type="submit" className="main_btn">Envoyer le message</button>
             </div>
+            </div>
           </form>
-
-
         </div>
-
         <div className="col-lg-4">
           <div className="media contact-info">
             <span className="contact-info__icon"><i className="ti-home"></i></span>

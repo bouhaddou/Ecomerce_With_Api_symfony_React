@@ -2,32 +2,31 @@ import React,{ useState, useEffect} from 'react';
 import ReactDOM from "react-dom"
 import Navbar from './Component/Navbar';
 import Footer from './Component/Footer';
-import '../css/bootstrap.css'
-import '../css/linericon/style.css'
-import '../css/font-awesome.min.css'
-import '../css/themify-icons.css'
-import '../css/flaticon.css'
-import '../css/owl-carousel/owl.carousel.min.css'
-import '../css/lightbox/simpleLightbox.css'
-import '../css/nice-select/css/nice-select.css'
-import '../css/animate-css/animate.css'
-import '../css/jquery-ui/jquery-ui.css'
-import '../css/app.css';
-import '../css/style.css'
-import '../css/responsive.css';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+
+
+
+
+
+
+
+import { HashRouter, Switch, Route, withRouter, Redirect } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import Shop from './pages/Shop';
 import ProductInfo from './pages/ProductInfo';
+import LoginPage from './pages/LoginPage';
+import LoginApi from "./services/LoginApi";
 import Checkout from './pages/checkout';
 import Cart from './pages/cart';
 import Contact from './pages/contact';
 import BlogPage from './pages/BlogPage';
 import Produits from './pages/produits';
+import dashboardPage from './pages/admin/dashboardPage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminNavbar from './Component/AdminNavbar';
+import AdminAside from './Component/AdminAside';
+import ProduitsPage from './pages/admin/produits/ProduitsPage';
 
-
+LoginApi.setup();
 const App = () => {
     const [cartNav, setCartNav] = useState([])
 
@@ -40,32 +39,39 @@ const App = () => {
     useEffect(() => {
         fetchProduits();
     }, []);
-   
-   
+    const [isAuthenticated, setIsAuthenticated] = useState(LoginApi.isAuthenticated)  ;
+    const PrivatRoute = ({path, isAuthenticated, component}) =>{
+        return isAuthenticated ? 
+           <Route path={path} isAuthenticated={isAuthenticated} component={component} /> 
+           : 
+           <Redirect to="/login" />
+       }   
 
 
     return ( <>
         <HashRouter>
-                <Navbar cartNav={cartNav} setCartNav={setCartNav} />
-                <Switch>
-                <Route  path="/produits" render={props=>{
-                   return <Produits setCartNav={setCartNav} {...props} /> 
-                }} />
-                <Route path="/ProductInfo/:id" render={props=>{
-                   return <ProductInfo setCartNav={setCartNav} {...props} /> 
-                }} />
-                <Route path="/cart" render={props=>{
-                   return <Cart setCartNav={setCartNav} {...props} /> 
-                }} />
-                <Route path="/checkout" component={Checkout} />
-                <Route path="/contact" component={Contact} />
-                <Route path="/blogPage" component={BlogPage} />
-                <Route path="/" render={props=>{
-                   return <HomePage setCartNav={setCartNav} {...props} /> 
-                }} />
-                </Switch>
-            <Footer />
-            <ToastContainer position={toast.POSITION.BOTTOM_LEFT}/>
+            
+            {!isAuthenticated && <Navbar cartNav={cartNav} setCartNav={setCartNav} />}
+            
+            {isAuthenticated && <AdminNavbar />}
+            {isAuthenticated && <AdminAside />}
+            <Switch>
+              
+                {!isAuthenticated && <Route path="/login"  render={props => (  <LoginPage  onLogin={setIsAuthenticated} {...props} /> )} />}
+                {!isAuthenticated && <Route  path="/produits" render={props=>{return <Produits setCartNav={setCartNav} {...props} /> }} />}
+                {!isAuthenticated && <Route path="/ProductInfo/:id" render={props=> { return <ProductInfo setCartNav={setCartNav} {...props} /> }} />}
+                {!isAuthenticated &&<Route path="/cart" render={props=>{ return <Cart setCartNav={setCartNav} {...props} />  }} /> }
+                {!isAuthenticated && <Route path="/checkout" component={Checkout} />}
+                {!isAuthenticated && <Route path="/contact" component={Contact} />}
+                {!isAuthenticated && <Route path="/blogPage" component={BlogPage} /> }
+                {!isAuthenticated && <Route path="/" render={props=>{return <HomePage setCartNav={setCartNav} {...props} /> }} /> }
+                <div className="content-wrapper">
+                        <PrivatRoute path="/produitsAdmin" component={ProduitsPage} isAuthenticated={isAuthenticated}  />
+                        {/* <PrivatRoute path="/" component={dashboardPage} isAuthenticated={isAuthenticated}  /> */}
+                </div>
+            </Switch>
+            {!isAuthenticated &&<Footer />}
+        <ToastContainer position={toast.POSITION.BOTTOM_LEFT}/>
         </HashRouter>
     </> );
 }

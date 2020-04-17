@@ -4,14 +4,21 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Post;
+use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Produit;
 use App\Entity\Categorie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    private $encoder;
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder=$encoder;
+    }
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('FR-fr');
@@ -58,10 +65,25 @@ class AppFixtures extends Fixture
             $avatar= "http://lorempixel.com/640/480/";
             $post->setTitle($faker->slug)
                     ->setContent($content)
+                    ->setSetAt( new \Datetime())
                     ->setAvatar($avatar);
            
             $manager->persist($post);
          }
+
+         for($b=0; $b < 10; $b++)
+        { 
+          
+            $user =new User();
+            $chrono = 1;
+            $hash = $this->encoder->encodePassword($user,"password");
+            $user->setFirstName($faker->firstName)
+                 ->setLastName($faker->lastName)
+                 ->setPassword($hash)
+                 ->setEmail($faker->email);
+                
+            $manager->persist($user);
+        }
          
 
         $manager->flush();

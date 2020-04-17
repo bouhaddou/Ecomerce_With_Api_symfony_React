@@ -4,7 +4,7 @@ import Field from '../Component/forms/Field';
 import axios from 'axios';
 import RadioFilds from '../Component/forms/RadioFilds';
 import { toast } from 'react-toastify';
-const Checkout = () => {
+const Checkout = ({props}) => {
 
   const [montant , setMontant] = useState(0);
   const [client,setClient] = useState({
@@ -92,7 +92,7 @@ const Checkout = () => {
     }  
     
     for(let j=0; j<element.length;j++){
-       await  axios.post("http://localhost:8000/api/shops", {
+      await  axios.post("http://localhost:8000/api/shops", {
             ...shop,   produit : `/api/produits/${element[j].produit}`, 
             client : `/api/clients/${element[j].client}`,
             Quantity:element[j].quantity, 
@@ -104,6 +104,7 @@ const Checkout = () => {
     localStorage.removeItem("product")
     localStorage.removeItem("total")
     toast.success("votre commande a été bien envoyer ")
+    props.history.push("/");
   }catch({response}){
     const { violations } = response.data;
     if(violations){
@@ -327,20 +328,20 @@ const Checkout = () => {
                 <ul className="list list_2">
                   <li>
                     <a href="#"
-                      >Total de Panier
-                      <span>{montant.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} dirhams</span>
+                      >Sous-total
+                      <span>{montant.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dhs</span>
                     </a>
                   </li>
                   <li>
                     <a href="#"
-                      >Livraison est fixé a 
-                      <span>50.00 dirhams</span>
+                      >Montant de livraison 
+                      <span>50.00 Dhs</span>
                     </a>
                   </li>
                   <li>
                     <a href="#"
-                      >Total à payer
-                      <span>{(montant + 50).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} dirhams</span>
+                      >Total
+                      <span>{(montant + 50).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dhs</span>
                     </a>
                   </li>
                 </ul>

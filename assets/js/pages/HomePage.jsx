@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import ProductAreaPro from './ProductAreaPro';
 import BlogPage from './BlogPage';
 import Slider from '../Component/Slider';
 import produitsApi from '../services/produitsApi';
