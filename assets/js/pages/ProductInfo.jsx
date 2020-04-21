@@ -13,10 +13,10 @@ const ProductInfo = (props) => {
 
   const fetchProduit= async () =>{
     try{
-     const  {id,ref,title,content,prix,setAt,observation,avatar,images} = await produitsApi.findbyId(par)
-      setProduit({id,ref,title,content,prix,setAt,observation,avatar,images})
+     const  {id,ref,title,content,prix,setAt,observation,avatars} = await produitsApi.findbyId(par)
+      setProduit({id,ref,title,content,prix,setAt,observation,avatars})
       const quantity = 1
-      setCart({id,title,avatar,prix,quantity})
+      setCart({id,title,avatars,prix,quantity})
       const donnee = JSON.parse(localStorage.getItem("product"))
       if(donnee !== null)
       {
@@ -35,7 +35,7 @@ useEffect(() =>{
   fetchProduit();
  
 },[])
-
+console.log(produit)
 const handleShop =(param) => {
   const data = localStorage.getItem("product")
   if(data === null)
@@ -103,20 +103,20 @@ const handleShop =(param) => {
               >
                 <ol className="carousel-indicators">
               
-                {produit.images.map(function(image, index) {  
+                {produit.avatars.map(function(image, index) {  
                   return <li key={image.id} data-target="#carouselExampleIndicators" 
                   data-slide-to={index} className={"  " + (index == 0 && " active ")}>
-                    <img className="w-100 h-100" src={image.path} alt=""/>
+                    <img className="w-100 h-100" src={"avatars/" +  image.filePath} alt=""/>
                   </li>
                 } )}
                 </ol>
                 <div className="carousel-inner">
                 
-                {produit.images.map(function(image, index){
+                {produit.avatars.map(function(image, index){
                   return <div  key={image.id} className={"carousel-item  " + (index == 0 && " active")}>
                     <img
                       className="d-block w-100"
-                      src={image.path}
+                      src={"avatars/" +  image.filePath}
                       alt="First slide"
                     />
                   </div>

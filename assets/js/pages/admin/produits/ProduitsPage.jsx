@@ -49,6 +49,7 @@ const ProduitsPage = () => {
         <div className="card mt-3">
               <div className="card-header">
                 <h3 className="card-title text-danger">Produits ( {Produits.length} produits)</h3>
+                <h3 className="card-title text-danger"><Link to="/produit"></Link></h3>
               </div>
               <div className="card-body p-0">
                 <table className="table table-condensed">

@@ -65,7 +65,7 @@ const handleShop =(param) => {
         toast.success("le produit est ajouter au panier avec succée")
 }
 
-
+console.log(produits)
    if(!produits){
       return <div>loading</div>}else{ return ( <>
             <section className="banner_area">
@@ -106,7 +106,9 @@ const handleShop =(param) => {
                             <div key={produit.id} className="col-lg-4 col-md-6 col-sm-12">
                               <div className="single-product">
                                 <div className="product-img">
-                                  <img className="img-fluid w-100" src={produit.avatar}  />
+                                
+                                  <img  className="img-fluid w-100" src={"avatars/" +  produit.avatars[0].filePath} />
+                               
                                   <div className="p_icon">
                                       <Link  to={"/ProductInfo/" + produit.id } >
                                         <i className="ti-eye"></i>
@@ -168,7 +170,7 @@ const handleShop =(param) => {
             </div>
         </section>
         <section className="offer_area">
-        <div className="container">
+        {/* <div className="container">
             <div className="row justify-content-center">
                 <div className="col-lg-5  ">
                   <div className="" >
@@ -187,7 +189,7 @@ const handleShop =(param) => {
                   </div>
                 </div>
             </div>
-        </div>
+        </div> */}
   </section>                          
     
     </> );

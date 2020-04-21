@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-
 import { toast } from 'react-toastify';
 import LoginApi from '../services/LoginApi';
 import Field from '../Component/forms/Field';
@@ -23,7 +22,7 @@ const LoginPage = ({onLogin , history}) => {
            await LoginApi.autheticate(credentials);
            setError("");
            onLogin(true);
-    //        toast.success("vous êtes bien connectée ")
+      toast.success("vous êtes bien connectée ")
         history.push("/dashboard");
 
         }catch(error){

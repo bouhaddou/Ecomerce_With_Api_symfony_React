@@ -2,11 +2,19 @@
 
 namespace App\Entity;
 
+use App\Entity\Avatar;
+use App\Entity\MediaObject;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProduitRepository")
@@ -51,24 +59,13 @@ class Produit
      * @Groups({"produit_read"})
      */
     private $prix;
-
-    /**
-     * @ORM\Column(type="date")
-     * @Groups({"produit_read"})
-     */
-    private $setAt;
-
+   
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"produit_read"})
      */
     private $observation;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="Produit")
-     * @Groups({"produit_read"})
-     */
-    private $images;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Shop", mappedBy="produit")
@@ -83,22 +80,33 @@ class Produit
     private $Categorie;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var Avatar|null
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Avatar")
+     * @ORM\JoinColumn(nullable=true)
+     * ApiSubresource()
      * @Groups({"produit_read"})
      */
-    private $avatar;
+    public $avatars;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $setDATE;
 
     /**
      * @ORM\PrePersist
      */
-    public function setCreatedAtValue()
+    public function dddsdad()
     {
-        $this->setAt = new \DateTime();
+        $this->setDATE = new \DateTime();
     }
+
+
     public function __construct()
     {
-        $this->images = new ArrayCollection();
         $this->shops = new ArrayCollection();
+        $this->avatars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,17 +162,6 @@ class Produit
         return $this;
     }
 
-    public function getSetAt(): ?\DateTimeInterface
-    {
-        return $this->setAt;
-    }
-
-    public function setSetAt(\DateTimeInterface $setAt): self
-    {
-        $this->setAt = $setAt;
-
-        return $this;
-    }
 
     public function getObservation(): ?string
     {
@@ -178,36 +175,6 @@ class Produit
         return $this;
     }
 
-    /**
-     * @return Collection|Image[]
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(Image $image): self
-    {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-            $image->setProduit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            // set the owning side to null (unless already changed)
-            if ($image->getProduit() === $this) {
-                $image->setProduit(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Shop[]
@@ -252,15 +219,39 @@ class Produit
         return $this;
     }
 
-    public function getAvatar(): ?string
+
+    public function getSetDATE(): ?\DateTimeInterface
     {
-        return $this->avatar;
+        return $this->setDATE;
     }
 
-    public function setAvatar(string $avatar): self
+    public function setSetDATE(?\DateTimeInterface $setDATE): self
     {
-        $this->avatar = $avatar;
+        $this->setDATE = $setDATE;
 
         return $this;
     }
+
+
+    /**
+     * @return Collection|Avatar[]
+     */
+    public function getAvatars(): Collection
+    {
+        return $this->avatars;
+    }
+
+    public function addAvatar(Avatar $avatar)
+    {
+            $this->avatars->add($avatar);
+
+    }
+    public function removeAvatar(Avatar $avatar)
+    {
+            $this->avatars->removeElement($avatar);
+
+    }
+
+
+
 }

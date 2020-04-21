@@ -25,6 +25,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AdminNavbar from './Component/AdminNavbar';
 import AdminAside from './Component/AdminAside';
 import ProduitsPage from './pages/admin/produits/ProduitsPage';
+import produitPage from './pages/admin/produits/produitPage';
 
 LoginApi.setup();
 const App = () => {
@@ -66,7 +67,8 @@ const App = () => {
                 {!isAuthenticated && <Route path="/blogPage" component={BlogPage} /> }
                 {!isAuthenticated && <Route path="/" render={props=>{return <HomePage setCartNav={setCartNav} {...props} /> }} /> }
                 <div className="content-wrapper">
-                        <PrivatRoute path="/produitsAdmin" component={ProduitsPage} isAuthenticated={isAuthenticated}  />
+                        <PrivatRoute path="/produitNew" component={produitPage} isAuthenticated={isAuthenticated}  />
+                        {/* <PrivatRoute path="/produitsAdmin" component={ProduitsPage} isAuthenticated={isAuthenticated}  /> */}
                         {/* <PrivatRoute path="/" component={dashboardPage} isAuthenticated={isAuthenticated}  /> */}
                 </div>
             </Switch>

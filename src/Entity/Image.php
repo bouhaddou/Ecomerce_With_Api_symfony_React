@@ -36,10 +36,7 @@ class Image
      */
     private $path;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Produit", inversedBy="images")
-     */
-    private $Produit;
+
 
     public function getId(): ?int
     {
