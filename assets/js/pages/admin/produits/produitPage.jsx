@@ -5,32 +5,46 @@ import Select from '../../../Component/forms/Select';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Images from '../../../Component/Images';
+import produitsApi from '../../../services/produitsApi';
 
-const produitPage = () => {
-
+const produitPage = (props) => {
+    const {id = "new"} = props.match.params;
+    const [fileImage, setFileImage] = useState([])
+    const [editing, setEditing] = useState(false)
     const [categories, setCategories] = useState(undefined)
     const [produit, setProduit] = useState({
-      
+      ref:"",
+      Categorie:"",
+      title:"",
+      content:"",
+      prix:"",
+      observation:"",
     })  
-    const [fileImage, setFileImage] = useState([])
-
-    const [produitImageName, setProduitImageName] = useState({})
-
     const [error, setError] = useState({
         ref:"",
         Categorie:"",
         title:"",
         content:"",
         prix:"",
-        setAt:"",
         observation:"",
-        image:""
+        file:""
     })
+
+
     const CategorieItem =async () =>{
         try{
-        const data = await  CategorieApi.findAll()
-        setCategories(data)
-        console.log(categories)
+            const data = await  CategorieApi.findAll()
+            setCategories(data) 
+          
+            if(id != "new"){
+              const data2 = await produitsApi.findbyId(id)
+              console.log(data2.avatars)
+              setProduit(data2)
+              setEditing(true)
+              setFileImage(data2.avatars)
+             
+            }
+          
         }catch(error){
             console.log(error.response)
         }
@@ -43,44 +57,83 @@ const produitPage = () => {
     const handleChange =async event =>{
         const {value,name} = event.currentTarget;
         const  dd =new FormData();
+        try{
        if(name == "file"){
       dd.append('file',event.target.files[0],event.target.files[0].name);
       const response = await axios.post("http://localhost:8000/api/avatars",dd)
       setFileImage(fileImage => [...fileImage,response.data])
+      setError({ ...error, file : ""})
        }
-
         if(name == "prix")
         {
         setProduit({...produit, [name] : parseFloat(value)})
         }else{
         setProduit({...produit, [name] : value})
         }
+      }catch({response}){
+        const { violations } = response.data;
+        if(violations){
+            const apiErrors = {};
+            violations.forEach(({propertyPath,message})  => {
+                apiErrors[propertyPath] = message;
+            });
+            setError(apiErrors);
+            toast.error(" Merci de vérifiee tous les champs avant de passer la commande  ")
+      }
+      }
     }
+    console.log(produit.Categorie)
   const handleSubmit =async event =>{
     event.preventDefault();
-  // try{
-    console.log(...fileImage,fileImage.id);
-    const response = await axios.post("http://localhost:8000/api/produits",{...produit, 
-    Categorie:`/api/categories/${produit.Categorie}`, ...fileImage,
-         avatars: fileImage.map(img => 
-         `/api/avatars/${img.id}`)
-      });
+        try{
+          if(fileImage.length > 0 &&  produit.Categorie != null ){
+            if(editing){
+                await axios.put("http://localhost:8000/api/produits/"+ id,{...produit, 
+                Categorie:`/api/categories/${produit.Categorie}`, ...fileImage,
+                    avatars: fileImage.map(img => 
+                    `/api/avatars/${img.id}`)
+                  });
+                  toast.success("Le produit a été Modifier Avec succée ")
+            }else{
+              await axios.post("http://localhost:8000/api/produits",{...produit, 
+              Categorie:`/api/categories/${produit.Categorie}`, ...fileImage,
+                  avatars: fileImage.map(img => 
+                  `/api/avatars/${img.id}`)
+                });
+                toast.success("Le produit a été Ajouter Avec succée ")
+            }
+              props.history.push("/product");
+              }else{
+                if(produit.Categorie == null){
+                 setError({ ...error, Categorie : "la categorie ne doit pas être vide "})
+                 toast.error("merci de choisie la catégorie de produit ")
+                }else {
+               
+                setError({ ...error, file : "Aucune image n'a été trouvée "})
+                toast.error("Aucune image n'a été trouvée ")
+                }
+              
+              }
+              
+            }catch({response}){
+              const { violations } = response.data;
+              if(violations){
+                  const apiErrors = {};
+                  violations.forEach(({propertyPath,message})  => {
+                      apiErrors[propertyPath] = message;
+                  });
+                  setError(apiErrors);
+                  toast.error(" Merci de vérifiee tous les champs avant de passer la commande  ")
+            }
+      }
+}
 
-      // const  dd =new FormData();
-      // dd.append('contentUrl',produitImage,produitImageName);
-      // dd.append('Produit',"/api/produits/5")
-      // const response = await axios.post("http://localhost:8000/api/media_objects",dd
-  // )
-       
-    
-  //     toast.success("Le produit a été Ajouter Avec succée ")
-  // }catch(error){
-  //   console.log(error.response)
-  // }
- 
-  }
-
-
+const handleDeleteImage = id =>{
+  const tableorigine = [...fileImage];
+        setFileImage(fileImage.filter(fileimg => fileimg.id !== id));
+      
+}
+console.log(produit)
   if(!categories){ return <div>chargement</div>}else{ return ( <>
     <div className="content-header">
       <div className="container-fluid">
@@ -133,11 +186,11 @@ const produitPage = () => {
                  <FieldsAd type="file" placeholder="Image  " style="form-group"
                     label="Image :"
                     name="file"
-                    error={error.image}
+                    error={error.file}
                     onChange={handleChange}
                 />
                 <div className="">
-                    <Images  fileImage={fileImage} />
+                    <Images  fileImage={fileImage} handleDeleteImage={handleDeleteImage} />
                 </div>
                 <FieldsAd type="text" placeholder="Content  " style="form-group"
                     label="content :"

@@ -37,7 +37,7 @@ const ProduitsPage = () => {
           </div>
           <div className="col-sm-6">
             <ol className="breadcrumb float-sm-right">
-              <li className="breadcrumb-item"><a href="#">Accueil</a></li>
+              <li className="breadcrumb-item"><a>Accueil</a></li>
               <li className="breadcrumb-item active">Table de bord</li>
             </ol>
           </div>
@@ -49,7 +49,7 @@ const ProduitsPage = () => {
         <div className="card mt-3">
               <div className="card-header">
                 <h3 className="card-title text-danger">Produits ( {Produits.length} produits)</h3>
-                <h3 className="card-title text-danger"><Link to="/produit"></Link></h3>
+                <h3 className="card-title text-danger float-right"><Link to="/product/new">Ajouter un Produits</Link></h3>
               </div>
               <div className="card-body p-0">
                 <table className="table table-condensed">
@@ -57,9 +57,8 @@ const ProduitsPage = () => {
                     <tr>
                       <th >ref</th>
                       <th>Titre</th>
-                      <th>Image</th>
-                      <th >Content</th>
-                      <th >action</th>
+                      <th className="text-center">Image</th>
+                      <th className="text-center" >action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -68,12 +67,33 @@ const ProduitsPage = () => {
                       <td>{produit.ref}</td>
                       <td>{produit.title.slice(0,10)}</td>
                       <td className="">
-                        <img className=" img-size-50  " src={produit.avatar} alt={produit.ref} /> 
+                          <ul className="list-inline text-center">
+                            { produit.avatars != 0 && produit.avatars.map((image) =>
+                              <li className="list-inline-item" key={image.id}>
+                                  <img style={{ maxHeight: 60, maxWidth:60  }} className="table-avatar rounded-circle text-center" src={"avatars/" +  image.filePath} alt={produit.ref} />
+                              </li>
+                            )}
+                          </ul>
                       </td>
-                      <td>{produit.content.slice(0,15)}</td>
+                      <td className="project-actions text-right">
+                          <Link to={"/product/show/" + produit.id} className="btn btn-primary btn-sm mr-1" >
+                              <i className="fas fa-folder"> 
+                              </i>     Voir
+                          
+                          </Link>
+                          <Link to={"/product/"+ produit.id}  className="btn btn-info btn-sm mr-1" >
+                              <i className="fas fa-pencil-alt"> 
+                              </i>  Edit
+                             
+                          </Link>
+                          <Link to="/product/delete" className="btn btn-danger btn-sm mr-1">
+                              <i className="fas fa-trash">
+                              </i>   Supprimer
+                            
+                          </Link>
+                      </td>
                       <td>
-                          <Link className="btn text-primary" to=""><i className="fas fa-eye"></i></Link>
-                          <Link className="btn text-success" to=""><i className="fas fa-edit"></i></Link>
+                      
                       </td>
                     </tr>
                 )}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 
@@ -66,21 +67,21 @@ const AdminAside = () => {
             <a href="#" className="nav-link active bg-info">
               <i className="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Familles
+                Gestion des Produits
               </p>
             </a>
           </li>
           <li className="nav-item">
-            <a href="{{ path('familly_index')}}" className="nav-link">
+            <Link to="/product" className="nav-link">
               <i className="fas fa-circle nav-icon"></i>
-              <p>Liste des Familles</p>
-            </a>
+              <p>Liste des Produits</p>
+            </Link>
           </li>
               <li className="nav-item">
-                <a href="{{ path('familly_new')}}" className="nav-link">
+                <Link to="/product/new" className="nav-link">
                   <i className="fas fa-circle nav-icon"></i>
-                   <p>Ajouter une Famille</p>
-                </a>
+                   <p>Ajouter un Produits</p>
+                </Link>
             </li>
             <li className="nav-item has-treeview menu-open mt-3 mb-2">
             <a href="#" className="nav-link active bg-success">

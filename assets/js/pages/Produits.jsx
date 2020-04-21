@@ -65,7 +65,6 @@ const handleShop =(param) => {
         toast.success("le produit est ajouter au panier avec succée")
 }
 
-console.log(produits)
    if(!produits){
       return <div>loading</div>}else{ return ( <>
             <section className="banner_area">
@@ -107,7 +106,7 @@ console.log(produits)
                               <div className="single-product">
                                 <div className="product-img">
                                 
-                                  <img  className="img-fluid w-100" src={"avatars/" +  produit.avatars[0].filePath} />
+                                  <img style={{ maxHeight: 165  }}  className="img-fluid w-100 h-100" src={"avatars/" +  produit.avatars[0].filePath} />
                                
                                   <div className="p_icon">
                                       <Link  to={"/ProductInfo/" + produit.id } >
@@ -120,10 +119,10 @@ console.log(produits)
                                 </div>
                                 <div className="product-btm">
                                   <Link className="d-block text-center " to={"/ProductInfo/" + produit.id }>
-                                  <h4 className="text-info">{produit.title.slice(0,22)}</h4>
+                                  <h4 className="text-info text-center">{produit.title.slice(0,22)}</h4>
                                   </Link>
                                   <div className="mt-3 text-center">
-                                    <h6 className="mr-4 text-center text-danger">{produit.prix.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dirhams</h6>
+                                    <h6 className="mr-4 text-center text-danger text-center">{produit.prix.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Dhs</h6>
                                   </div>
                                 </div>
                               </div>

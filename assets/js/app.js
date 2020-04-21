@@ -26,20 +26,12 @@ import AdminNavbar from './Component/AdminNavbar';
 import AdminAside from './Component/AdminAside';
 import ProduitsPage from './pages/admin/produits/ProduitsPage';
 import produitPage from './pages/admin/produits/produitPage';
-
+import ShowProduct from './pages/admin/produits/ShowProduct'
 LoginApi.setup();
 const App = () => {
     const [cartNav, setCartNav] = useState([])
 
-    const fetchProduits =  () =>{
-         
-        const items = JSON.parse(localStorage.getItem("product")) 
-        setCartNav(items)
-    }
     
-    useEffect(() => {
-        fetchProduits();
-    }, []);
     const [isAuthenticated, setIsAuthenticated] = useState(LoginApi.isAuthenticated)  ;
     const PrivatRoute = ({path, isAuthenticated, component}) =>{
         return isAuthenticated ? 
@@ -67,9 +59,11 @@ const App = () => {
                 {!isAuthenticated && <Route path="/blogPage" component={BlogPage} /> }
                 {!isAuthenticated && <Route path="/" render={props=>{return <HomePage setCartNav={setCartNav} {...props} /> }} /> }
                 <div className="content-wrapper">
-                        <PrivatRoute path="/produitNew" component={produitPage} isAuthenticated={isAuthenticated}  />
-                        {/* <PrivatRoute path="/produitsAdmin" component={ProduitsPage} isAuthenticated={isAuthenticated}  /> */}
-                        {/* <PrivatRoute path="/" component={dashboardPage} isAuthenticated={isAuthenticated}  /> */}
+                        <PrivatRoute path="/product/show/:id" component={ShowProduct} isAuthenticated={isAuthenticated}  />
+                        <PrivatRoute path="/product/:id" component={produitPage} isAuthenticated={isAuthenticated}  />
+                        <PrivatRoute path="/product/new" component={produitPage} isAuthenticated={isAuthenticated}  />
+                        <PrivatRoute path="/product" component={ProduitsPage} isAuthenticated={isAuthenticated}  />
+                        <PrivatRoute path="/" component={dashboardPage} isAuthenticated={isAuthenticated}  />
                 </div>
             </Switch>
             {!isAuthenticated &&<Footer />}

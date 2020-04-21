@@ -3,18 +3,14 @@
 namespace App\Entity;
 
 use App\Entity\Avatar;
-use App\Entity\MediaObject;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProduitRepository")
@@ -39,24 +35,28 @@ class Produit
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"produit_read"})
+     * @Assert\NotBlank(message="le réference de produit ne doit pas être vide")
      */
     private $ref;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"produit_read"})
+     * @Assert\NotBlank(message="le titre de produit ne doit pas être vide")
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"produit_read"})
+     * @Assert\NotBlank(message="la description  de produit ne doit pas être vide")
      */
     private $content;
 
     /**
      * @ORM\Column(type="float")
      * @Groups({"produit_read"})
+     * @Assert\NotBlank(message="le prix de produit ne doit pas être vide")
      */
     private $prix;
    
@@ -83,7 +83,7 @@ class Produit
      * @var Avatar|null
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Avatar")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn()
      * ApiSubresource()
      * @Groups({"produit_read"})
      */

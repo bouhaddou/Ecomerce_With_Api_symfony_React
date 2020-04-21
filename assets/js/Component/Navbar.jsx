@@ -119,7 +119,7 @@ const Navbar = ({cartNav,setCartNav}) => {
                       aria-expanded="false"> 
                       
                       Panier 
-                      <span className=""> {cartNav && cartNav.length} </span> Produits 
+                      <span className=""> {cartNav.length > 0 && cartNav.length} </span> Produits 
                       <i className="ti-shopping-cart fa-3x text-danger"></i></a>
                    
                     <ul className="dropdown-menu "> <Link to="/cart">
@@ -128,7 +128,7 @@ const Navbar = ({cartNav,setCartNav}) => {
                           
                         </thead>
                         <tbody>
-                            {cartNav && cartNav.map(produit =>  
+                            {cartNav.length > 0 && cartNav.map(produit =>  
                               <tr key={produit.id}>
                                   <td>{produit.title.slice(0,7)}</td>
                                   <td>

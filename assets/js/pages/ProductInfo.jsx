@@ -35,7 +35,6 @@ useEffect(() =>{
   fetchProduit();
  
 },[])
-console.log(produit)
 const handleShop =(param) => {
   const data = localStorage.getItem("product")
   if(data === null)
@@ -43,7 +42,7 @@ const handleShop =(param) => {
     const quantity= 1
     const {id,title, avatar, prix} = param
     localStorage.setItem("product",JSON.stringify([{id,title, avatar, prix,quantity}]))
-    props.setCartItems({id,title, avatar, prix,quantity})
+    props.setCartNav({id,title, avatar, prix,quantity})
   }else{
     const {id,title, avatar, prix} = param
     const proLocal = JSON.parse(localStorage.getItem("product"));
@@ -54,12 +53,12 @@ const handleShop =(param) => {
       proLocal[index].quantity = cart.quantity 
       localStorage.removeItem("product") 
       localStorage.setItem("product",JSON.stringify(proLocal))
-      props.setCartItems(proLocal)
+      props.setCartNav(proLocal)
     }else{
     const quantity= 1
     proLocal.push({id,title, avatar, prix,quantity})
     localStorage.setItem("product",JSON.stringify(proLocal))
-    props.setCartItems(proLocal)
+    props.setCartNav(proLocal)
     }
   }
 }

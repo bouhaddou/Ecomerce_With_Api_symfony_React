@@ -48,6 +48,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
      * 
      * @Vich\UploadableField(mapping="avatars", fileNameProperty="filePath")
      * @Groups({"media_object_read","produit_read"})
+     * @Assert\NotBlank(message="Aucune image n'a été trouvée")
+     * @Assert\File(
+     *     maxSize = "3072k",
+     *     mimeTypes = {"image/jpeg", "image/png"},
+     *     mimeTypesMessage = "Please upload a valid Image"
+     * )
      */
     public $file;
 

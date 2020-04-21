@@ -10,7 +10,7 @@ const Select = ({ name, value, label, error ="", children, onChange}) => {
                     name={name}
                     id={name} 
                     value={value} 
-                    className="form-control"
+                    className={"form-control " + (error && " is-invalid" )}
                 >
                    {children}
                 </select>
