@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShopRepository")
  * @ApiResource(
+ *     normalizationContext={"groups"={"shops_read","client_read"}}
  * )
  */
 class Shop
@@ -17,45 +19,51 @@ class Shop
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"shops_read","client_read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Produit", inversedBy="shops")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"shops_read","client_read"})
      */
     private $produit;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="shops")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"shops_read"})
      */
     private $client;
 
     /**
      * @ORM\Column(type="float")
-     * 
+     * @Groups({"shops_read","client_read"})
      */
     private $Quantity;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="merci de coucher le type de Régelement")
+     * @Groups({"shops_read","client_read"})
      */
     private $type;
-
-
 
     /**
      * @ORM\Column(type="boolean")
      * @Assert\NotBlank(message="les conditions génerale ne sont pas accepter")
+     * @Groups({"shops_read","client_read"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"shops_read","client_read"})
      */
     private $delivery;
+
+
 
     public function getId(): ?int
     {

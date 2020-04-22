@@ -38,36 +38,30 @@ const AdminAside = () => {
             </a>
           </li>
           <li className="nav-item has-treeview menu-open mt-5 mb-2">
-            <a href="#" className="nav-link active bg-danger">
+            <a  className="nav-link active bg-danger">
               <i className="nav-icon fas fa-user"></i>
               <p>
-                Gestion des Utilisateurs
+               Catégories
               </p>
             </a>
           </li>
             <li className="nav-item">
-              <a href="#" className="nav-link">
+            <Link to="/categories" className="nav-link">
                 <i className="nav-icon far fa-circle text-danger"></i>
-                <p className="text">Liste des Utilisateurs</p>
-              </a>
+                <p className="text">Liste des Catégories</p>
+                </Link>
             </li>
             <li className="nav-item">
-              <a href="#" className="nav-link">
+            <Link to="/categories/new" className="nav-link">
                 <i className="nav-icon far fa-circle text-warning"></i>
-                <p>Ajouter un utilsateur</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <i className="nav-icon far fa-circle text-warning"></i>
-                <p>Ajouter un Role</p>
-              </a>
+                <p>Ajouter une Catégorie</p>
+                </Link>
             </li>
           <li className="nav-item has-treeview menu-open mt-3 mb-2">
-            <a href="#" className="nav-link active bg-info">
+            <a  className="nav-link">
               <i className="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Gestion des Produits
+                Produits
               </p>
             </a>
           </li>
@@ -87,22 +81,16 @@ const AdminAside = () => {
             <a href="#" className="nav-link active bg-success">
               <i className="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Orphelins
+                Ventes
               </p>
             </a>
           </li>
-            <li className="nav-item">
-              <a href="{{ path('orphelin_index') }}" className="nav-link">
-                <i className="nav-icon far fa-circle text-danger"></i>
-                <p className="text">Liste des Orphelins</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="{{ path('orphelin_new')}}" className="nav-link">
-                <i className="nav-icon far fa-circle text-warning"></i>
-                <p>Ajouter un Orphelin</p>
-              </a>
-            </li>
+          <li className="nav-item">
+            <Link to="/shops" className="nav-link">
+              <i className="fas fa-circle nav-icon"></i>
+              <p>Liste des Ventes</p>
+            </Link>
+          </li>
             <li className="nav-item has-treeview menu-open mt-3 mb-3">
             <a href="#" className="nav-link active bg-warning">
               <i className="nav-icon fas fa-tachometer-alt"></i>

@@ -4,56 +4,50 @@
 namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
-use ApiPlatform\Core\Util\RequestAttributesExtractor;
-use App\Entity\MediaObject;
+use App\Entity\Shop;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Vich\UploaderBundle\Storage\StorageInterface;
 
-final class ResolveMediaObjectContentUrlSubscriber implements EventSubscriberInterface
+ class ResolveMediaObjectContentUrlSubscriber implements EventSubscriberInterface
 {
-    private $storage;
-
-    public function __construct(StorageInterface $storage)
+    // /**
+    //  * @var 
+    //  */
+    // private $mailer;
+    // // private $repository;
+    // public function __construct(\Swift_Mailer $mailer)
+    // {
+    //     $this->mailer = $mailer;
+    //     // $this->repository = $repository;
+    // }
+    public static function getSubscribedEvents()
     {
-        $this->storage = $storage;
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::VIEW => ['onPreSerialize', EventPriorities::PRE_SERIALIZE],
+        return[
+            KernelEvents::VIEW =>['setChronoForInvoce',EventPriorities::PRE_VALIDATE]
         ];
     }
 
-    public function onPreSerialize(ViewEvent $event): void
+    public function setChronoForInvoce( ViewEvent $event)
     {
-        $controllerResult = $event->getControllerResult();
         
-        $request = $event->getRequest();
-        
-        if ($controllerResult instanceof Response || !$request->attributes->getBoolean('_api_respond', true)) {
-            return;
-        }
+//         $shop= $event->getControllerResult();
+//         $methode= $event->getRequest()->getMethod();
 
-        if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) || !\is_a($attributes['resource_class'], MediaObject::class, true)) {
-            return;
-        }
-
-        $mediaObjects = $controllerResult;
-        if (!is_iterable($mediaObjects)) {
-            $mediaObjects = [$mediaObjects];
+//         if($shop instanceof Shop && $methode === 'POST')
+//         {
           
-        }
-
-        foreach ($mediaObjects as $mediaObject) {
-            if (!$mediaObject instanceof MediaObject) {
-                continue;
-            }
-
-            $mediaObject->contentUrl = $this->storage->resolveUri($mediaObject, 'file');
-        }
+//             $message = (new \Swift_Message('Hello Email'))
+//                 ->setFrom('brahimbouhaddou12@gmail.com')
+//                 ->setTo('bihi1991@gmail.com.com')
+//                 ->setBody(
+//                     $this->renderView("hello how are you" );
+                    
+//                     $mailer->send($message);
+//         }
+        
+        
+// }
     }
+
 }

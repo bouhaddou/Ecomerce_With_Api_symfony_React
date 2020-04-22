@@ -5,12 +5,16 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
- * @ApiResource()
+ * @ApiResource(
+ *    normalizationContext={"groups"={"client_read","shops_read"}}
+ * )
  */
 class Client
 {
@@ -18,18 +22,21 @@ class Client
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"shops_read","client_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Merci de Entreé Votre Prénom ")
+     * @Groups({"shops_read","client_read"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Merci de Entreé Votre Nom ")
+     * @Groups({"shops_read","client_read"})
      */
     private $lastName;
 
@@ -39,49 +46,58 @@ class Client
      * @Assert\Email(
      *     message = "L'email '{{ value }}' n'est pas un email valide."
      * )
+     * @Groups({"shops_read","client_read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Assert\NotBlank(message="Merci de Entreé Votre Adresse  ")
+     * @Groups({"shops_read","client_read"})
      */
     private $adress;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"shops_read","client_read"})
      */
     private $password;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Shop", mappedBy="client")
+     * @ApiSubresource()
      */
     private $shops;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"shops_read","client_read"})
      */
     private $company;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Merci de Entreé Votre numéro de téléphone ")
+     * @Groups({"shops_read","client_read"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"shops_read","client_read"})
      */
     private $paye;
 
     /**
      * @ORM\Column(type="string")
+     * @Groups({"shops_read","client_read"})
      */
     private $postal;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Merci de Entreé Votre Ville ")
+     * @Groups({"shops_read","client_read"})
      */
     private $city;
 

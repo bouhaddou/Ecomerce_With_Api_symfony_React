@@ -27,6 +27,10 @@ import AdminAside from './Component/AdminAside';
 import ProduitsPage from './pages/admin/produits/ProduitsPage';
 import produitPage from './pages/admin/produits/produitPage';
 import ShowProduct from './pages/admin/produits/ShowProduct'
+import CategoriesPage from './pages/admin/categories/CategoriesPage';
+import CategoriePage from './pages/admin/categories/CategoriePage';
+import CommandePage from './pages/admin/shops/CommandePage';
+import ShowShops from './pages/admin/shops/ShowShops'
 LoginApi.setup();
 const App = () => {
     const [cartNav, setCartNav] = useState([])
@@ -59,11 +63,18 @@ const App = () => {
                 {!isAuthenticated && <Route path="/blogPage" component={BlogPage} /> }
                 {!isAuthenticated && <Route path="/" render={props=>{return <HomePage setCartNav={setCartNav} {...props} /> }} /> }
                 <div className="content-wrapper">
-                        <PrivatRoute path="/product/show/:id" component={ShowProduct} isAuthenticated={isAuthenticated}  />
-                        <PrivatRoute path="/product/:id" component={produitPage} isAuthenticated={isAuthenticated}  />
-                        <PrivatRoute path="/product/new" component={produitPage} isAuthenticated={isAuthenticated}  />
-                        <PrivatRoute path="/product" component={ProduitsPage} isAuthenticated={isAuthenticated}  />
-                        <PrivatRoute path="/" component={dashboardPage} isAuthenticated={isAuthenticated}  />
+                <Switch>
+                
+                <PrivatRoute path="/shops/show/:id" component={ShowShops} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/shops" component={CommandePage} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/categories/:id" component={CategoriePage} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/categories" component={CategoriesPage} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/product/show/:id" component={ShowProduct} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/product/:id" component={produitPage} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/product/new" component={produitPage} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/product" component={ProduitsPage} isAuthenticated={isAuthenticated}  />
+                <PrivatRoute path="/" component={dashboardPage} isAuthenticated={isAuthenticated}  />
+                   </Switch>
                 </div>
             </Switch>
             {!isAuthenticated &&<Footer />}

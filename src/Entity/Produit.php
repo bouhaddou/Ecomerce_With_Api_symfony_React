@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks()
  * @ApiResource(
  *  normalizationContext={
- *      "groups"={"produit_read"}
+ *      "groups"={"produit_read","shops_read","media_object_read"}
  * }
  *
  * )
@@ -28,41 +28,41 @@ class Produit
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"produit_read"})
+     * @Groups({"produit_read","shops_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"produit_read"})
      * @Assert\NotBlank(message="le réference de produit ne doit pas être vide")
+     * @Groups({"produit_read","shops_read"})
      */
     private $ref;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"produit_read"})
+     * @Groups({"produit_read","shops_read"})
      * @Assert\NotBlank(message="le titre de produit ne doit pas être vide")
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"produit_read"})
+     * @Groups({"produit_read","shops_read"})
      * @Assert\NotBlank(message="la description  de produit ne doit pas être vide")
      */
     private $content;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"produit_read"})
+     * @Groups({"produit_read","shops_read"})
      * @Assert\NotBlank(message="le prix de produit ne doit pas être vide")
      */
     private $prix;
    
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"produit_read"})
+     * @Groups({"produit_read","shops_read"})
      */
     private $observation;
 
@@ -76,6 +76,7 @@ class Produit
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Categorie", inversedBy="produits")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"produit_read","shops_read"})
      */
     private $Categorie;
 

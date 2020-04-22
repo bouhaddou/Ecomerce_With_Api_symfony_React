@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategorieRepository")
@@ -23,6 +24,7 @@ class Categorie
  
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="la description  de categorie ne doit pas être vide")
      */
     private $content;
 
@@ -33,6 +35,7 @@ class Categorie
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le titre de la catégorie ne doit pas être vide")
      */
     private $title;
 
